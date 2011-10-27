@@ -5,4 +5,5 @@
               {applications,[kernel,stdlib]},
               {mod,{mtc_app,[]}},
               {env,[]},
-              {modules,[mtc_app,mtc_sup,mtc_util]}]}.
+              {modules,[mtc_app,mtc_schema_types,mtc_sup,mtc_thrift,
+                        mtc_util]}]}.

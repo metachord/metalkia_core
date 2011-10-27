@@ -29,7 +29,7 @@ struct_info_ext('mt_comment') ->
 ;
 
 struct_info_ext('mt_post') ->
-  {struct, [{1, undefined, i64, 'id', 0}, {2, undefined, string, 'author', undefined}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, optional, string, 'origin', undefined}, {6, optional, string, 'client', undefined}, {7, undefined, i32, 'comment_cnt', 0}, {8, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}, 'comments', []}]}
+  {struct, [{1, undefined, i64, 'id', 0}, {2, undefined, string, 'author', undefined}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, optional, string, 'origin', undefined}, {6, optional, string, 'client', undefined}, {7, undefined, i32, 'comments_cnt', 0}, {8, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}, 'comments', []}]}
 ;
 
 struct_info_ext('mt_person') ->

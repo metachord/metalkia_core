@@ -19,7 +19,7 @@
                   timestamp = undefined :: integer(), 
                   origin = undefined :: string(), 
                   client = undefined :: string(), 
-                  comment_cnt = 0 :: integer(), 
+                  comments_cnt = 0 :: integer(), 
                   comments = [] :: list()}).
 
 %% struct mt_person

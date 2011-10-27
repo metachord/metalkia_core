@@ -22,7 +22,7 @@ struct Mt_post {
   4: i64                timestamp,
   5: optional binary    origin,
   6: optional binary    client,
-  7: i32                comment_cnt = 0,
+  7: i32                comments_cnt = 0,
   8: list<Mt_comment>   comments
 }
 

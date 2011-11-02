@@ -2,7 +2,8 @@
 
 -export([
          a2b/1,
-         a2l/1
+         a2l/1,
+         timestamp/0
         ]).
 
 
@@ -17,3 +18,7 @@ a2l(A) when is_integer(A) -> integer_to_list(A);
 a2l(A) when is_list(A) -> A;
 a2l(A) when is_binary(A) -> binary_to_list(A);
 a2l(A) -> A.
+
+timestamp() ->
+  {A1, A2, _} = now(),
+  A1*1000*1000+A2.

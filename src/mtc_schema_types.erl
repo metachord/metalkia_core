@@ -10,30 +10,30 @@
 
 -export([struct_info/1, struct_info_ext/1]).
 
+struct_info('mt_person') ->
+  {struct, [{1, i32}, {2, string}]}
+;
+
 struct_info('mt_comment') ->
-  {struct, [{1, i32}, {2, string}, {3, string}, {4, i64}, {5, string}, {6, string}, {7, {list, i32}}]}
+  {struct, [{1, string}, {2, i32}, {3, {list, i32}}, {4, {struct, {'mtc_schema_types', 'mt_person'}}}, {5, string}, {6, i64}, {7, string}, {8, string}]}
 ;
 
 struct_info('mt_post') ->
-  {struct, [{1, i64}, {2, string}, {3, string}, {4, i64}, {5, string}, {6, string}, {7, i32}, {8, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}}]}
-;
-
-struct_info('mt_person') ->
-  {struct, [{1, i32}]}
+  {struct, [{1, string}, {2, {struct, {'mtc_schema_types', 'mt_person'}}}, {3, string}, {4, i64}, {5, i32}, {6, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}}, {7, string}, {8, string}]}
 ;
 
 struct_info('i am a dummy struct') -> undefined.
 
+struct_info_ext('mt_person') ->
+  {struct, [{1, undefined, i32, 'id', 0}, {2, optional, string, 'name', undefined}]}
+;
+
 struct_info_ext('mt_comment') ->
-  {struct, [{1, undefined, i32, 'id', 0}, {2, undefined, string, 'author', undefined}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, optional, string, 'origin', undefined}, {6, optional, string, 'client', undefined}, {7, undefined, {list, i32}, 'parents', []}]}
+  {struct, [{1, undefined, string, 'post_id', undefined}, {2, undefined, i32, 'id', 0}, {3, undefined, {list, i32}, 'parents', []}, {4, undefined, {struct, {'mtc_schema_types', 'mt_person'}}, 'author', #mt_person{}}, {5, undefined, string, 'body', undefined}, {6, undefined, i64, 'timestamp', undefined}, {7, optional, string, 'origin', undefined}, {8, optional, string, 'client', undefined}]}
 ;
 
 struct_info_ext('mt_post') ->
-  {struct, [{1, undefined, i64, 'id', 0}, {2, undefined, string, 'author', undefined}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, optional, string, 'origin', undefined}, {6, optional, string, 'client', undefined}, {7, undefined, i32, 'comments_cnt', 0}, {8, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}, 'comments', []}]}
-;
-
-struct_info_ext('mt_person') ->
-  {struct, [{1, undefined, i32, 'id', 0}]}
+  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, {struct, {'mtc_schema_types', 'mt_person'}}, 'author', #mt_person{}}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, undefined, i32, 'comments_cnt', 0}, {6, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}, 'comments', []}, {7, optional, string, 'origin', undefined}, {8, optional, string, 'client', undefined}]}
 ;
 
 struct_info_ext('i am a dummy struct') -> undefined.

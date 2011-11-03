@@ -4,7 +4,9 @@
          a2b/1,
          a2l/1,
          timestamp/0,
-         get_env/3
+         get_env/3,
+         uri_encode/1,
+         uri_decode/1
         ]).
 
 
@@ -32,3 +34,9 @@ get_env(ModPid, Param, Default) ->
     undefined ->
       Default
   end.
+
+uri_encode(URI) ->
+  mochiweb_util:quote_plus(URI).
+
+uri_decode(URI) ->
+  mochiweb_util:unquote(URI).

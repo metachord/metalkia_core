@@ -3,7 +3,8 @@
 -export([
          a2b/1,
          a2l/1,
-         timestamp/0
+         timestamp/0,
+         get_env/3
         ]).
 
 
@@ -22,3 +23,12 @@ a2l(A) -> A.
 timestamp() ->
   {A1, A2, _} = now(),
   A1*1000*1000+A2.
+
+get_env(ModPid, Param, Default) ->
+  {ok, App} = application:get_application(ModPid),
+  case application:get_env(App, Param) of
+    {ok, Value} ->
+      Value;
+    undefined ->
+      Default
+  end.

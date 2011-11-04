@@ -45,14 +45,28 @@ sput(#mt_comment{post_id = PostId, parents = PrevParents} = Comment) ->
   NewPost = Post#mt_post{comments_cnt = NewId, comments = Comments++[NewComment]},
   ?DBG("PUT:~n~p", [NewPost]),
   mtriak:put_obj_value(DbPid, Object, mtc_thrift:write(NewPost), Bucket, PostId),
-  ?a2b(NewId).
-
+  ?a2b(NewId);
+sput(#mt_facebook{id = FbId} = FbProfile) ->
+  ?DBG("PUT:~n~p", [FbProfile]),
+  Data = mtc_thrift:write(FbProfile),
+  ok = mtriak:put_obj_value(undefined, Data, <<"facebook">>, FbId),
+  FbId.
 
 sget(mt_post = StructName, Key) ->
   case mtriak:get_obj_value(<<"posts">>, Key) of
     PostIo when is_list(PostIo) orelse
                 is_binary(PostIo) ->
       Result = mtc_thrift:read(StructName, PostIo),
+      ?DBG("GET:~n~p", [Result]),
+      Result;
+    Other ->
+      Other
+  end;
+sget(mt_facebook = StructName, Key) ->
+  case mtriak:get_obj_value(<<"facebook">>, Key) of
+    Io when is_list(Io) orelse
+            is_binary(Io) ->
+      Result = mtc_thrift:read(StructName, Io),
       ?DBG("GET:~n~p", [Result]),
       Result;
     Other ->

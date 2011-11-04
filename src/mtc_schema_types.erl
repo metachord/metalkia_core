@@ -22,6 +22,14 @@ struct_info('mt_post') ->
   {struct, [{1, string}, {2, {struct, {'mtc_schema_types', 'mt_person'}}}, {3, string}, {4, i64}, {5, i32}, {6, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}}, {7, string}, {8, string}]}
 ;
 
+struct_info('mt_fb_friend') ->
+  {struct, [{1, string}, {2, string}]}
+;
+
+struct_info('mt_facebook') ->
+  {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, i32}, {8, string}, {9, byte}, {10, string}, {11, string}, {12, {list, {struct, {'mtc_schema_types', 'mt_fb_friend'}}}}]}
+;
+
 struct_info('i am a dummy struct') -> undefined.
 
 struct_info_ext('mt_person') ->
@@ -34,6 +42,14 @@ struct_info_ext('mt_comment') ->
 
 struct_info_ext('mt_post') ->
   {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, {struct, {'mtc_schema_types', 'mt_person'}}, 'author', #mt_person{}}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, undefined, i32, 'comments_cnt', 0}, {6, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}, 'comments', []}, {7, optional, string, 'origin', undefined}, {8, optional, string, 'client', undefined}]}
+;
+
+struct_info_ext('mt_fb_friend') ->
+  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'name', undefined}]}
+;
+
+struct_info_ext('mt_facebook') ->
+  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'name', undefined}, {3, optional, string, 'first_name', undefined}, {4, optional, string, 'middle_name', undefined}, {5, optional, string, 'last_name', undefined}, {6, undefined, string, 'link', undefined}, {7, undefined, i32, 'gender',   0}, {8, undefined, string, 'email', undefined}, {9, undefined, byte, 'timezone', 0}, {10, optional, string, 'updated_time', undefined}, {11, optional, string, 'locale', undefined}, {12, undefined, {list, {struct, {'mtc_schema_types', 'mt_fb_friend'}}}, 'friends', []}]}
 ;
 
 struct_info_ext('i am a dummy struct') -> undefined.

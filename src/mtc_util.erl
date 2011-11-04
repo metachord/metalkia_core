@@ -1,8 +1,12 @@
 -module(mtc_util).
 
+-include_lib("metalkia_core/include/mt_records.hrl").
+
 -export([
          a2b/1,
          a2l/1,
+         a2i/1,
+         a2gender/1,
          timestamp/0,
          get_env/3,
          uri_encode/1,
@@ -21,6 +25,18 @@ a2l(A) when is_integer(A) -> integer_to_list(A);
 a2l(A) when is_list(A) -> A;
 a2l(A) when is_binary(A) -> binary_to_list(A);
 a2l(A) -> A.
+
+a2i(A) when is_integer(A) -> A;
+a2i(A) when is_list(A) -> list_to_integer(A);
+a2i(A) when is_binary(A) -> a2i(binary_to_list(A));
+a2i(_) -> throw(badarg).
+
+a2gender(A) ->
+  case A of
+    <<"male">> -> ?mtc_schema_Mt_gender_MALE;
+    <<"female">> -> ?mtc_schema_Mt_gender_FEMALE;
+    _ -> ?mtc_schema_Mt_gender_UNKNOWN
+  end.
 
 timestamp() ->
   {A1, A2, _} = now(),

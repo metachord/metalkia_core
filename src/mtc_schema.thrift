@@ -60,3 +60,20 @@ struct Mt_facebook {
   12: list<Mt_fb_friend>    friends,
   13: optional binary       username
 }
+
+struct Mt_tw_friend {
+  1: binary            id,
+  2: optional binary   name
+}
+
+struct Mt_twitter {
+  1:  binary                id,
+  2:  binary                screen_name,
+  3:  binary                name,
+  4:  binary                description,
+  5:  binary                url,
+  6:  binary                timezone,
+  7:  i32                   utc_offset,
+  8:  binary                locale,
+  9:  list<Mt_tw_friend>    friends
+}

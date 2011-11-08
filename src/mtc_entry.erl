@@ -50,7 +50,12 @@ sput(#mt_facebook{id = FbId} = FbProfile) ->
   ?DBG("PUT:~n~p", [FbProfile]),
   Data = mtc_thrift:write(FbProfile),
   ok = mtriak:put_obj_value(undefined, Data, <<"facebook">>, FbId),
-  FbId.
+  FbId;
+sput(#mt_twitter{id = TwId} = TwProfile) ->
+  ?DBG("PUT:~n~p", [TwProfile]),
+  Data = mtc_thrift:write(TwProfile),
+  ok = mtriak:put_obj_value(undefined, Data, <<"twitter">>, TwId),
+  TwId.
 
 sget(mt_post = StructName, Key) ->
   case mtriak:get_obj_value(<<"posts">>, Key) of
@@ -64,6 +69,16 @@ sget(mt_post = StructName, Key) ->
   end;
 sget(mt_facebook = StructName, Key) ->
   case mtriak:get_obj_value(<<"facebook">>, Key) of
+    Io when is_list(Io) orelse
+            is_binary(Io) ->
+      Result = mtc_thrift:read(StructName, Io),
+      ?DBG("GET:~n~p", [Result]),
+      Result;
+    Other ->
+      Other
+  end;
+sget(mt_twitter = StructName, Key) ->
+  case mtriak:get_obj_value(<<"twitter">>, Key) of
     Io when is_list(Io) orelse
             is_binary(Io) ->
       Result = mtc_thrift:read(StructName, Io),

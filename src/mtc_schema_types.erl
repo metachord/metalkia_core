@@ -30,6 +30,14 @@ struct_info('mt_facebook') ->
   {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, i32}, {8, string}, {9, byte}, {10, string}, {11, string}, {12, {list, {struct, {'mtc_schema_types', 'mt_fb_friend'}}}}, {13, string}]}
 ;
 
+struct_info('mt_tw_friend') ->
+  {struct, [{1, string}, {2, string}]}
+;
+
+struct_info('mt_twitter') ->
+  {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, i32}, {8, string}, {9, {list, {struct, {'mtc_schema_types', 'mt_tw_friend'}}}}]}
+;
+
 struct_info('i am a dummy struct') -> undefined.
 
 struct_info_ext('mt_person') ->
@@ -50,6 +58,14 @@ struct_info_ext('mt_fb_friend') ->
 
 struct_info_ext('mt_facebook') ->
   {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'name', undefined}, {3, optional, string, 'first_name', undefined}, {4, optional, string, 'middle_name', undefined}, {5, optional, string, 'last_name', undefined}, {6, undefined, string, 'link', undefined}, {7, undefined, i32, 'gender',   0}, {8, undefined, string, 'email', undefined}, {9, undefined, byte, 'timezone', 0}, {10, optional, string, 'updated_time', undefined}, {11, optional, string, 'locale', undefined}, {12, undefined, {list, {struct, {'mtc_schema_types', 'mt_fb_friend'}}}, 'friends', []}, {13, optional, string, 'username', undefined}]}
+;
+
+struct_info_ext('mt_tw_friend') ->
+  {struct, [{1, undefined, string, 'id', undefined}, {2, optional, string, 'name', undefined}]}
+;
+
+struct_info_ext('mt_twitter') ->
+  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'screen_name', undefined}, {3, undefined, string, 'name', undefined}, {4, undefined, string, 'description', undefined}, {5, undefined, string, 'url', undefined}, {6, undefined, string, 'timezone', undefined}, {7, undefined, i32, 'utc_offset', undefined}, {8, undefined, string, 'locale', undefined}, {9, undefined, {list, {struct, {'mtc_schema_types', 'mt_tw_friend'}}}, 'friends', []}]}
 ;
 
 struct_info_ext('i am a dummy struct') -> undefined.

@@ -53,4 +53,21 @@
                       friends = [] :: list(), 
                       username = undefined :: string()}).
 
+%% struct mt_tw_friend
+
+-record(mt_tw_friend, {id = undefined :: string(), 
+                       name = undefined :: string()}).
+
+%% struct mt_twitter
+
+-record(mt_twitter, {id = undefined :: string(), 
+                     screen_name = undefined :: string(), 
+                     name = undefined :: string(), 
+                     description = undefined :: string(), 
+                     url = undefined :: string(), 
+                     timezone = undefined :: string(), 
+                     utc_offset = undefined :: integer(), 
+                     locale = undefined :: string(), 
+                     friends = [] :: list()}).
+
 -endif.

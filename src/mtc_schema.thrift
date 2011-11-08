@@ -57,5 +57,6 @@ struct Mt_facebook {
   9:  byte                  timezone = 0,
   10: optional binary       updated_time,
   11: optional binary       locale,
-  12: list<Mt_fb_friend>    friends
+  12: list<Mt_fb_friend>    friends,
+  13: optional binary       username
 }

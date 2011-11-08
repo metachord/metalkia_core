@@ -50,6 +50,7 @@
                       timezone = 0 :: integer(), 
                       updated_time = undefined :: string(), 
                       locale = undefined :: string(), 
-                      friends = [] :: list()}).
+                      friends = [] :: list(), 
+                      username = undefined :: string()}).
 
 -endif.

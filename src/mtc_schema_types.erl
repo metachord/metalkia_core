@@ -27,7 +27,7 @@ struct_info('mt_fb_friend') ->
 ;
 
 struct_info('mt_facebook') ->
-  {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, i32}, {8, string}, {9, byte}, {10, string}, {11, string}, {12, {list, {struct, {'mtc_schema_types', 'mt_fb_friend'}}}}]}
+  {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, i32}, {8, string}, {9, byte}, {10, string}, {11, string}, {12, {list, {struct, {'mtc_schema_types', 'mt_fb_friend'}}}}, {13, string}]}
 ;
 
 struct_info('i am a dummy struct') -> undefined.
@@ -49,7 +49,7 @@ struct_info_ext('mt_fb_friend') ->
 ;
 
 struct_info_ext('mt_facebook') ->
-  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'name', undefined}, {3, optional, string, 'first_name', undefined}, {4, optional, string, 'middle_name', undefined}, {5, optional, string, 'last_name', undefined}, {6, undefined, string, 'link', undefined}, {7, undefined, i32, 'gender',   0}, {8, undefined, string, 'email', undefined}, {9, undefined, byte, 'timezone', 0}, {10, optional, string, 'updated_time', undefined}, {11, optional, string, 'locale', undefined}, {12, undefined, {list, {struct, {'mtc_schema_types', 'mt_fb_friend'}}}, 'friends', []}]}
+  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'name', undefined}, {3, optional, string, 'first_name', undefined}, {4, optional, string, 'middle_name', undefined}, {5, optional, string, 'last_name', undefined}, {6, undefined, string, 'link', undefined}, {7, undefined, i32, 'gender',   0}, {8, undefined, string, 'email', undefined}, {9, undefined, byte, 'timezone', 0}, {10, optional, string, 'updated_time', undefined}, {11, optional, string, 'locale', undefined}, {12, undefined, {list, {struct, {'mtc_schema_types', 'mt_fb_friend'}}}, 'friends', []}, {13, optional, string, 'username', undefined}]}
 ;
 
 struct_info_ext('i am a dummy struct') -> undefined.

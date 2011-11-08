@@ -16,6 +16,7 @@
          sput/1,
          sget/2,
          supdate/1,
+         sdelete/2,
          counter/1
         ]).
 
@@ -136,6 +137,9 @@ supdate(#mt_twitter{id = Id} = Profile) ->
   ok = mtriak:put_obj_value(undefined, Data, <<"twitter">>, Id),
   {Status, NewProfile}.
 
+sdelete(StructName, Key) ->
+  mtriak:delete(bucket_of_struct(StructName), Key).
+
 counter(mt_person) ->
   mtriak:inc_counter(<<"persons">>);
 counter(mt_post) ->
@@ -144,3 +148,11 @@ counter(mt_post) ->
 %% Internal
 int_to_key(I) ->
   iolist_to_binary(erlang:integer_to_list(I)).
+
+bucket_of_struct(StructName) ->
+  case StructName of
+    mt_person -> <<"persons">>;
+    mt_post -> <<"posts">>;
+    mt_facebook -> <<"facebook">>;
+    mt_twitter -> <<"twitter">>
+  end.

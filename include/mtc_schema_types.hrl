@@ -7,7 +7,16 @@
 
 %% struct mt_person
 
--record(mt_person, {id = 0 :: integer(), 
+-record(mt_person, {id = undefined :: string(), 
+                    username = undefined :: string(), 
+                    facebook_id = undefined :: string(), 
+                    twitter_id = undefined :: string(), 
+                    posts_list_key = undefined :: string(), 
+                    comments_list_key = undefined :: string()}).
+
+%% struct mt_author
+
+-record(mt_author, {id = undefined :: string(), 
                     name = undefined :: string()}).
 
 %% struct mt_comment
@@ -15,7 +24,7 @@
 -record(mt_comment, {post_id = undefined :: string(), 
                      id = 0 :: integer(), 
                      parents = [] :: list(), 
-                     author = #mt_person{} :: #mt_person{}, 
+                     author = #mt_author{} :: #mt_author{}, 
                      body = undefined :: string(), 
                      timestamp = undefined :: integer(), 
                      origin = undefined :: string(), 
@@ -24,7 +33,7 @@
 %% struct mt_post
 
 -record(mt_post, {id = undefined :: string(), 
-                  author = #mt_person{} :: #mt_person{}, 
+                  author = #mt_author{} :: #mt_author{}, 
                   body = undefined :: string(), 
                   timestamp = undefined :: integer(), 
                   comments_cnt = 0 :: integer(), 
@@ -51,7 +60,8 @@
                       updated_time = undefined :: string(), 
                       locale = undefined :: string(), 
                       friends = [] :: list(), 
-                      username = undefined :: string()}).
+                      username = undefined :: string(), 
+                      metalkia_id = undefined :: string()}).
 
 %% struct mt_tw_friend
 
@@ -68,6 +78,7 @@
                      timezone = undefined :: string(), 
                      utc_offset = undefined :: integer(), 
                      locale = undefined :: string(), 
-                     friends = [] :: list()}).
+                     friends = [] :: list(), 
+                     metalkia_id = undefined :: string()}).
 
 -endif.

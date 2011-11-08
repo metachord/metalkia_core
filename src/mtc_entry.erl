@@ -15,9 +15,20 @@
 -export([
          sput/1,
          sget/2,
+         supdate/1,
          counter/1
         ]).
 
+sput(#mt_person{} = Person) ->
+  Id = counter(mt_person),
+  PersonId = int_to_key(Id),
+  NewPerson = Person#mt_person{
+                id = PersonId
+               },
+  ?DBG("PUT:~n~p", [NewPerson]),
+  Data = mtc_thrift:write(NewPerson),
+  ok = mtriak:put_obj_value(undefined, Data, <<"persons">>, PersonId),
+  PersonId;
 sput(#mt_post{} = Post) ->
   Id = counter(mt_post),
   PostId = int_to_key(Id),
@@ -57,6 +68,16 @@ sput(#mt_twitter{id = TwId} = TwProfile) ->
   ok = mtriak:put_obj_value(undefined, Data, <<"twitter">>, TwId),
   TwId.
 
+sget(mt_person = StructName, Key) ->
+  case mtriak:get_obj_value(<<"persons">>, Key) of
+    Io when is_list(Io) orelse
+            is_binary(Io) ->
+      Result = mtc_thrift:read(StructName, Io),
+      ?DBG("GET:~n~p", [Result]),
+      Result;
+    Other ->
+      Other
+  end;
 sget(mt_post = StructName, Key) ->
   case mtriak:get_obj_value(<<"posts">>, Key) of
     PostIo when is_list(PostIo) orelse
@@ -88,7 +109,35 @@ sget(mt_twitter = StructName, Key) ->
       Other
   end.
 
+supdate(#mt_facebook{id = Id} = Profile) ->
+  ?DBG("UPDATE:~n~p", [Profile]),
+  {Status, NewProfile} =
+    case sget(mt_facebook, Id) of
+      #mt_facebook{metalkia_id = MetalkiaId} = _StoredProfile ->
+        %% TODO: Compare Profile and StoredProfile
+        {updated, Profile#mt_facebook{metalkia_id = MetalkiaId}};
+      _ ->
+        {new, Profile}
+    end,
+  Data = mtc_thrift:write(NewProfile),
+  ok = mtriak:put_obj_value(undefined, Data, <<"facebook">>, Id),
+  {Status, NewProfile};
+supdate(#mt_twitter{id = Id} = Profile) ->
+  ?DBG("UPDATE:~n~p", [Profile]),
+  {Status, NewProfile} =
+    case sget(mt_twitter, Id) of
+      #mt_twitter{metalkia_id = MetalkiaId} = _StoredProfile ->
+        %% TODO: Compare Profile and StoredProfile
+        {updated, Profile#mt_twitter{metalkia_id = MetalkiaId}};
+      _ ->
+        {new, Profile}
+    end,
+  Data = mtc_thrift:write(NewProfile),
+  ok = mtriak:put_obj_value(undefined, Data, <<"twitter">>, Id),
+  {Status, NewProfile}.
 
+counter(mt_person) ->
+  mtriak:inc_counter(<<"persons">>);
 counter(mt_post) ->
   mtriak:inc_counter(<<"posts">>).
 

@@ -2,7 +2,7 @@ namespace cpp metalkia
 namespace erl metalkia
 
 
-typedef i32 PersonId
+typedef binary PersonId
 
 enum Mt_gender {
   UNKNOWN   = 0,
@@ -11,8 +11,17 @@ enum Mt_gender {
 }
 
 struct Mt_person {
-  1: PersonId           id = 0,
-  2: optional binary    name
+  1:  PersonId               id,
+  2:  optional binary        username,
+  3:  optional binary        facebook_id,
+  4:  optional binary        twitter_id,
+  5:  binary                 posts_list_key,
+  6:  binary                 comments_list_key
+}
+
+struct Mt_author {
+  1: PersonId               id,
+  2: binary                 name
 }
 
 typedef binary PostId
@@ -22,7 +31,7 @@ struct Mt_comment {
   1: PostId             post_id,
   2: CommentId          id = 0,
   3: list<CommentId>    parents,
-  4: Mt_person          author,
+  4: Mt_author          author,
   5: binary             body,
   6: i64                timestamp,
   7: optional binary    origin,
@@ -31,7 +40,7 @@ struct Mt_comment {
 
 struct Mt_post {
   1: PostId             id,
-  2: Mt_person          author,
+  2: Mt_author          author,
   3: binary             body,
   4: i64                timestamp,
   5: i32                comments_cnt = 0,
@@ -58,7 +67,8 @@ struct Mt_facebook {
   10: optional binary       updated_time,
   11: optional binary       locale,
   12: list<Mt_fb_friend>    friends,
-  13: optional binary       username
+  13: optional binary       username,
+  14: optional PersonId     metalkia_id
 }
 
 struct Mt_tw_friend {
@@ -75,5 +85,6 @@ struct Mt_twitter {
   6:  binary                timezone,
   7:  i32                   utc_offset,
   8:  binary                locale,
-  9:  list<Mt_tw_friend>    friends
+  9:  list<Mt_tw_friend>    friends,
+  10: optional PersonId     metalkia_id
 }

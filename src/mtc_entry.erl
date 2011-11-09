@@ -20,9 +20,10 @@
          counter/1
         ]).
 
-sput(#mt_person{} = Person) ->
-  Id = counter(mt_person),
-  PersonId = int_to_key(Id),
+sput(#mt_person{username = UserName} = Person) ->
+  %%Id = counter(mt_person),
+  %%PersonId = int_to_key(Id),
+  PersonId = UserName,
   NewPerson = Person#mt_person{
                 id = PersonId
                },

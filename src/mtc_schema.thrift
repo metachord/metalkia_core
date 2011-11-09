@@ -13,7 +13,7 @@ enum Mt_gender {
 struct Mt_person {
   1:  PersonId               id,
   2:  binary                 username,
-  3:  binary                 password_sha1,
+  3:  optional binary        password_sha1,
   4:  binary                 email,
   5:  optional binary        facebook_id,
   6:  optional binary        twitter_id,

@@ -9,6 +9,7 @@
 
 -record(mt_person, {id = undefined :: string(), 
                     username = undefined :: string(), 
+                    password_sha1 = undefined :: string(), 
                     facebook_id = undefined :: string(), 
                     twitter_id = undefined :: string(), 
                     posts_list_key = undefined :: string(), 

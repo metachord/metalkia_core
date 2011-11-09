@@ -11,7 +11,7 @@
 -export([struct_info/1, struct_info_ext/1]).
 
 struct_info('mt_person') ->
-  {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}]}
+  {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, string}]}
 ;
 
 struct_info('mt_author') ->
@@ -45,7 +45,7 @@ struct_info('mt_twitter') ->
 struct_info('i am a dummy struct') -> undefined.
 
 struct_info_ext('mt_person') ->
-  {struct, [{1, undefined, string, 'id', undefined}, {2, optional, string, 'username', undefined}, {3, optional, string, 'facebook_id', undefined}, {4, optional, string, 'twitter_id', undefined}, {5, undefined, string, 'posts_list_key', undefined}, {6, undefined, string, 'comments_list_key', undefined}]}
+  {struct, [{1, undefined, string, 'id', undefined}, {2, optional, string, 'username', undefined}, {3, undefined, string, 'password_sha1', undefined}, {4, optional, string, 'facebook_id', undefined}, {5, optional, string, 'twitter_id', undefined}, {6, undefined, string, 'posts_list_key', undefined}, {7, undefined, string, 'comments_list_key', undefined}]}
 ;
 
 struct_info_ext('mt_author') ->

@@ -29,7 +29,7 @@ sput(#mt_person{username = UserName} = Person) ->
                },
   ?DBG("PUT:~n~p", [NewPerson]),
   Data = mtc_thrift:write(NewPerson),
-  ok = mtriak:put_obj_value(undefined, Data, <<"persons">>, PersonId),
+  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_person), PersonId),
   PersonId;
 sput(#mt_post{} = Post) ->
   Id = counter(mt_post),
@@ -40,10 +40,10 @@ sput(#mt_post{} = Post) ->
              },
   ?DBG("PUT:~n~p", [NewPost]),
   Data = mtc_thrift:write(NewPost),
-  ok = mtriak:put_obj_value(undefined, Data, <<"posts">>, PostId),
+  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_post), PostId),
   PostId;
 sput(#mt_comment{post_id = PostId, parents = PrevParents} = Comment) ->
-  Bucket = <<"posts">>,
+  Bucket = bucket_of_struct(mt_post),
   DbPid = mtriak:get_pid(),
   {PostIo, Object} = mtriak:get_obj_value_to_modify(DbPid, Bucket, PostId),
   #mt_post{comments_cnt = CommCnt, comments = Comments} = Post =
@@ -62,16 +62,16 @@ sput(#mt_comment{post_id = PostId, parents = PrevParents} = Comment) ->
 sput(#mt_facebook{id = FbId} = FbProfile) ->
   ?DBG("PUT:~n~p", [FbProfile]),
   Data = mtc_thrift:write(FbProfile),
-  ok = mtriak:put_obj_value(undefined, Data, <<"facebook">>, FbId),
+  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_facebook), FbId),
   FbId;
 sput(#mt_twitter{id = TwId} = TwProfile) ->
   ?DBG("PUT:~n~p", [TwProfile]),
   Data = mtc_thrift:write(TwProfile),
-  ok = mtriak:put_obj_value(undefined, Data, <<"twitter">>, TwId),
+  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_twitter), TwId),
   TwId.
 
 sget(mt_person = StructName, Key) ->
-  case mtriak:get_obj_value(<<"persons">>, Key) of
+  case mtriak:get_obj_value(bucket_of_struct(StructName), Key) of
     Io when is_list(Io) orelse
             is_binary(Io) ->
       Result = mtc_thrift:read(StructName, Io),
@@ -81,7 +81,7 @@ sget(mt_person = StructName, Key) ->
       Other
   end;
 sget(mt_post = StructName, Key) ->
-  case mtriak:get_obj_value(<<"posts">>, Key) of
+  case mtriak:get_obj_value(bucket_of_struct(StructName), Key) of
     PostIo when is_list(PostIo) orelse
                 is_binary(PostIo) ->
       Result = mtc_thrift:read(StructName, PostIo),
@@ -91,7 +91,7 @@ sget(mt_post = StructName, Key) ->
       Other
   end;
 sget(mt_facebook = StructName, Key) ->
-  case mtriak:get_obj_value(<<"facebook">>, Key) of
+  case mtriak:get_obj_value(bucket_of_struct(StructName), Key) of
     Io when is_list(Io) orelse
             is_binary(Io) ->
       Result = mtc_thrift:read(StructName, Io),
@@ -101,7 +101,7 @@ sget(mt_facebook = StructName, Key) ->
       Other
   end;
 sget(mt_twitter = StructName, Key) ->
-  case mtriak:get_obj_value(<<"twitter">>, Key) of
+  case mtriak:get_obj_value(bucket_of_struct(StructName), Key) of
     Io when is_list(Io) orelse
             is_binary(Io) ->
       Result = mtc_thrift:read(StructName, Io),
@@ -122,7 +122,7 @@ supdate(#mt_person{id = Id} = Profile) ->
         {new, Profile}
     end,
   Data = mtc_thrift:write(NewProfile),
-  ok = mtriak:put_obj_value(undefined, Data, <<"persons">>, Id),
+  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_person), Id),
   {Status, NewProfile};
 supdate(#mt_facebook{id = Id} = Profile) ->
   ?DBG("UPDATE:~n~p", [Profile]),
@@ -135,7 +135,7 @@ supdate(#mt_facebook{id = Id} = Profile) ->
         {new, Profile}
     end,
   Data = mtc_thrift:write(NewProfile),
-  ok = mtriak:put_obj_value(undefined, Data, <<"facebook">>, Id),
+  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_facebook), Id),
   {Status, NewProfile};
 supdate(#mt_twitter{id = Id} = Profile) ->
   ?DBG("UPDATE:~n~p", [Profile]),
@@ -148,7 +148,7 @@ supdate(#mt_twitter{id = Id} = Profile) ->
         {new, Profile}
     end,
   Data = mtc_thrift:write(NewProfile),
-  ok = mtriak:put_obj_value(undefined, Data, <<"twitter">>, Id),
+  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_twitter), Id),
   {Status, NewProfile}.
 
 sdelete(StructName, Key) ->

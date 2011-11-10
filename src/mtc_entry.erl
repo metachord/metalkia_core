@@ -111,6 +111,19 @@ sget(mt_twitter = StructName, Key) ->
       Other
   end.
 
+supdate(#mt_person{id = Id} = Profile) ->
+  ?DBG("UPDATE:~n~p", [Profile]),
+  {Status, NewProfile} =
+    case sget(mt_person, Id) of
+      #mt_person{} = _StoredProfile ->
+        %% TODO: Compare Profile and StoredProfile
+        {updated, Profile#mt_person{}};
+      _ ->
+        {new, Profile}
+    end,
+  Data = mtc_thrift:write(NewProfile),
+  ok = mtriak:put_obj_value(undefined, Data, <<"persons">>, Id),
+  {Status, NewProfile};
 supdate(#mt_facebook{id = Id} = Profile) ->
   ?DBG("UPDATE:~n~p", [Profile]),
   {Status, NewProfile} =

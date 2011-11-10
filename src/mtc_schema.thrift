@@ -14,11 +14,12 @@ struct Mt_person {
   1:  PersonId               id,
   2:  binary                 username,
   3:  optional binary        password_sha1,
-  4:  binary                 email,
-  5:  optional binary        facebook_id,
-  6:  optional binary        twitter_id,
-  7:  binary                 posts_list_key,
-  8:  binary                 comments_list_key,
+  4:  optional binary        name,
+  5:  binary                 email,
+  6:  optional binary        facebook_id,
+  7:  optional binary        twitter_id,
+  8:  binary                 posts_list_key,
+  9:  binary                 comments_list_key,
 }
 
 struct Mt_author {

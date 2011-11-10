@@ -10,7 +10,8 @@
          timestamp/0,
          get_env/3,
          uri_encode/1,
-         uri_decode/1
+         uri_decode/1,
+         rand_str/1
         ]).
 
 
@@ -56,3 +57,12 @@ uri_encode(URI) ->
 
 uri_decode(URI) ->
   mochiweb_util:unquote(URI).
+
+rand_str(Size) ->
+  Str = re:replace(crypto:rand_bytes(Size*12), "[^0-9a-zA-Z]", "", [global, {return, list}]),
+  if length(Str) < Size ->
+      rand_str(Size);
+     true ->
+      {Ret, _} = lists:split(Size, Str),
+      Ret
+  end.

@@ -41,15 +41,22 @@ struct Mt_comment {
   8: optional binary    client
 }
 
+struct Mt_comment_ref {
+  1:  list<CommentId>       parents,
+  2:  binary                comment_key,
+}
+
 struct Mt_post {
-  1: PostId             id,
-  2: Mt_author          author,
-  3: binary             body,
-  4: i64                timestamp,
-  5: i32                comments_cnt = 0,
-  6: list<Mt_comment>   comments,
-  7: optional binary    origin,
-  8: optional binary    client
+  1:  PostId                  id,
+  2:  Mt_author               author,
+  3:  binary                  body,
+  4:  i64                     timestamp,
+  5:  i32                     comments_cnt = 0,
+  6:  list<Mt_comment_ref>    comments,
+  7:  optional binary         origin,
+  8:  optional binary         client,
+  9:  list<binary>            tags,
+  10: list<binary>            circles,
 }
 
 struct Mt_fb_friend {
@@ -90,4 +97,15 @@ struct Mt_twitter {
   8:  binary                locale,
   9:  list<Mt_tw_friend>    friends,
   10: optional PersonId     metalkia_id
+}
+
+struct Mt_stream {
+  1:  binary                username,
+  2:  list<binary>          tags
+}
+
+struct Mt_cname {
+  1:  binary                cname,
+  2:  binary                owner,
+  3:  list<Mt_stream>       streams,
 }

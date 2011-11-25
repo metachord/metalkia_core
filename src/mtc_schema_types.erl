@@ -22,8 +22,12 @@ struct_info('mt_comment') ->
   {struct, [{1, string}, {2, i32}, {3, {list, i32}}, {4, {struct, {'mtc_schema_types', 'mt_author'}}}, {5, string}, {6, i64}, {7, string}, {8, string}]}
 ;
 
+struct_info('mt_comment_ref') ->
+  {struct, [{1, {list, i32}}, {2, string}]}
+;
+
 struct_info('mt_post') ->
-  {struct, [{1, string}, {2, {struct, {'mtc_schema_types', 'mt_author'}}}, {3, string}, {4, i64}, {5, i32}, {6, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}}, {7, string}, {8, string}]}
+  {struct, [{1, string}, {2, {struct, {'mtc_schema_types', 'mt_author'}}}, {3, string}, {4, i64}, {5, i32}, {6, {list, {struct, {'mtc_schema_types', 'mt_comment_ref'}}}}, {7, string}, {8, string}, {9, {list, string}}, {10, {list, string}}]}
 ;
 
 struct_info('mt_fb_friend') ->
@@ -42,6 +46,14 @@ struct_info('mt_twitter') ->
   {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, i32}, {8, string}, {9, {list, {struct, {'mtc_schema_types', 'mt_tw_friend'}}}}, {10, string}]}
 ;
 
+struct_info('mt_stream') ->
+  {struct, [{1, string}, {2, {list, string}}]}
+;
+
+struct_info('mt_cname') ->
+  {struct, [{1, string}, {2, string}, {3, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}}]}
+;
+
 struct_info('i am a dummy struct') -> undefined.
 
 struct_info_ext('mt_person') ->
@@ -56,8 +68,12 @@ struct_info_ext('mt_comment') ->
   {struct, [{1, undefined, string, 'post_id', undefined}, {2, undefined, i32, 'id', 0}, {3, undefined, {list, i32}, 'parents', []}, {4, undefined, {struct, {'mtc_schema_types', 'mt_author'}}, 'author', #mt_author{}}, {5, undefined, string, 'body', undefined}, {6, undefined, i64, 'timestamp', undefined}, {7, optional, string, 'origin', undefined}, {8, optional, string, 'client', undefined}]}
 ;
 
+struct_info_ext('mt_comment_ref') ->
+  {struct, [{1, undefined, {list, i32}, 'parents', []}, {2, undefined, string, 'comment_key', undefined}]}
+;
+
 struct_info_ext('mt_post') ->
-  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, {struct, {'mtc_schema_types', 'mt_author'}}, 'author', #mt_author{}}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, undefined, i32, 'comments_cnt', 0}, {6, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment'}}}, 'comments', []}, {7, optional, string, 'origin', undefined}, {8, optional, string, 'client', undefined}]}
+  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, {struct, {'mtc_schema_types', 'mt_author'}}, 'author', #mt_author{}}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, undefined, i32, 'comments_cnt', 0}, {6, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment_ref'}}}, 'comments', []}, {7, optional, string, 'origin', undefined}, {8, optional, string, 'client', undefined}, {9, undefined, {list, string}, 'tags', []}, {10, undefined, {list, string}, 'circles', []}]}
 ;
 
 struct_info_ext('mt_fb_friend') ->
@@ -74,6 +90,14 @@ struct_info_ext('mt_tw_friend') ->
 
 struct_info_ext('mt_twitter') ->
   {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'screen_name', undefined}, {3, undefined, string, 'name', undefined}, {4, undefined, string, 'description', undefined}, {5, undefined, string, 'url', undefined}, {6, undefined, string, 'timezone', undefined}, {7, undefined, i32, 'utc_offset', undefined}, {8, undefined, string, 'locale', undefined}, {9, undefined, {list, {struct, {'mtc_schema_types', 'mt_tw_friend'}}}, 'friends', []}, {10, optional, string, 'metalkia_id', undefined}]}
+;
+
+struct_info_ext('mt_stream') ->
+  {struct, [{1, undefined, string, 'username', undefined}, {2, undefined, {list, string}, 'tags', []}]}
+;
+
+struct_info_ext('mt_cname') ->
+  {struct, [{1, undefined, string, 'cname', undefined}, {2, undefined, string, 'owner', undefined}, {3, undefined, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}, 'streams', []}]}
 ;
 
 struct_info_ext('i am a dummy struct') -> undefined.

@@ -33,6 +33,11 @@
                      origin = undefined :: string(), 
                      client = undefined :: string()}).
 
+%% struct mt_comment_ref
+
+-record(mt_comment_ref, {parents = [] :: list(), 
+                         comment_key = undefined :: string()}).
+
 %% struct mt_post
 
 -record(mt_post, {id = undefined :: string(), 
@@ -42,7 +47,9 @@
                   comments_cnt = 0 :: integer(), 
                   comments = [] :: list(), 
                   origin = undefined :: string(), 
-                  client = undefined :: string()}).
+                  client = undefined :: string(), 
+                  tags = [] :: list(), 
+                  circles = [] :: list()}).
 
 %% struct mt_fb_friend
 
@@ -83,5 +90,16 @@
                      locale = undefined :: string(), 
                      friends = [] :: list(), 
                      metalkia_id = undefined :: string()}).
+
+%% struct mt_stream
+
+-record(mt_stream, {username = undefined :: string(), 
+                    tags = [] :: list()}).
+
+%% struct mt_cname
+
+-record(mt_cname, {cname = undefined :: string(), 
+                   owner = undefined :: string(), 
+                   streams = [] :: list()}).
 
 -endif.

@@ -119,6 +119,16 @@ sget(mt_post = StructName, Key) ->
     Other ->
       Other
   end;
+sget(mt_comment = StructName, Key) ->
+  case mtriak:get_obj_value(bucket_of_struct(StructName), Key) of
+    Io when is_list(Io) orelse
+            is_binary(Io) ->
+      Result = mtc_thrift:read(StructName, Io),
+      ?DBG("GET:~n~p", [Result]),
+      Result;
+    Other ->
+      Other
+  end;
 sget(mt_facebook = StructName, Key) ->
   case mtriak:get_obj_value(bucket_of_struct(StructName), Key) of
     Io when is_list(Io) orelse

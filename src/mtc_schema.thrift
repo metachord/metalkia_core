@@ -106,6 +106,8 @@ struct Mt_stream {
 
 struct Mt_cname {
   1:  binary                cname,
-  2:  binary                owner,
-  3:  list<Mt_stream>       streams,
+  2:  binary                title,
+  3:  binary                owner,
+  4:  list<Mt_stream>       streams,
+  5:  optional binary       logo
 }

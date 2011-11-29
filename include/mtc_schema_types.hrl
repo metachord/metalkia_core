@@ -99,7 +99,9 @@
 %% struct mt_cname
 
 -record(mt_cname, {cname = undefined :: string(), 
+                   title = undefined :: string(), 
                    owner = undefined :: string(), 
-                   streams = [] :: list()}).
+                   streams = [] :: list(), 
+                   logo = undefined :: string()}).
 
 -endif.

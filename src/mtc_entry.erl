@@ -165,6 +165,18 @@ supdate(#mt_person{id = Id} = Profile) ->
   Data = mtc_thrift:write(NewProfile),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_person), Id),
   {Status, NewProfile};
+supdate(#mt_post{id = Id} = Post) ->
+  {Status, NewPost} =
+    case sget(mt_post, Id) of
+      #mt_post{} = _StoredPost ->
+        %% TODO: Compare Post and StoredPost
+        {updated, Post#mt_post{}};
+      _ ->
+        {new, Post}
+    end,
+  Data = mtc_thrift:write(NewPost),
+  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_post), Id),
+  {Status, NewPost};
 supdate(#mt_facebook{id = Id} = Profile) ->
   {Status, NewProfile} =
     case sget(mt_facebook, Id) of

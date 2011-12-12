@@ -30,6 +30,7 @@ a2l(A) -> A.
 a2i(A) when is_integer(A) -> A;
 a2i(A) when is_list(A) -> list_to_integer(A);
 a2i(A) when is_binary(A) -> a2i(binary_to_list(A));
+a2i(null) -> 0;
 a2i(_) -> throw(badarg).
 
 a2gender(A) ->

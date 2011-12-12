@@ -42,10 +42,20 @@ sput(#mt_post{author = #mt_author{id = UserId}, tags = Tags} = Post) ->
   DbPid = mtriak:get_pid(),
   TagsBucket = iolist_to_binary([UserId, "-", "tags"]),
   [begin
-     {PostIdsIo, Object} = mtriak:get_obj_value_to_modify(DbPid, TagsBucket, Tag),
-     OldPosts = if is_list(PostIdsIo) -> PostIdsIo; true -> [] end,
-     mtriak:put_obj_value(DbPid, Object, [PostId | OldPosts], TagsBucket, Tag)
-   end || Tag <- Tags],
+    {PostIdsIo, Object} = mtriak:get_obj_value_to_modify(DbPid, TagsBucket, Tag),
+    OldPosts =
+    if
+      is_tuple(PostIdsIo) andalso size(PostIdsIo) =:= 1 ->
+        element(1, PostIdsIo);
+      is_list(PostIdsIo) ->
+        PostIdsIo;
+      true -> []
+    end,
+    mtriak:put_obj_value(DbPid, Object, {[PostId | OldPosts]}, TagsBucket, Tag)
+  end || Tag <- Tags],
+
+  UserPostsBucket = iolist_to_binary([UserId, "-", "posts"]),
+  mtriak:put_obj_value(undefined, PostId, UserPostsBucket, PostId),
 
   PostId;
 sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{name = Author}} = Comment) ->

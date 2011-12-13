@@ -10,7 +10,9 @@ send(email, To, {From, Subj, Text}, Headers) when
   is_list(To) orelse is_binary(To) ->
   email(To, From, Subj, Text, Headers);
 send(email, #mt_person{email = To}, {From, Subj, Text}, Headers) ->
-  email(To, From, Subj, Text, Headers).
+  email(To, From, Subj, Text, Headers);
+send(_, _, _, _) ->
+  ok.
 
 email(To, From, Subj, Data, Headers) ->
   ?DBG("Send mail to ~p", [From]),

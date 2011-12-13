@@ -44,6 +44,7 @@ struct Mt_comment {
 struct Mt_comment_ref {
   1:  list<CommentId>       parents,
   2:  binary                comment_key,
+  3:  optional CommentId    id,
 }
 
 struct Mt_post {

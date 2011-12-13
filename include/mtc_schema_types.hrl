@@ -36,7 +36,8 @@
 %% struct mt_comment_ref
 
 -record(mt_comment_ref, {parents = [] :: list(), 
-                         comment_key = undefined :: string()}).
+                         comment_key = undefined :: string(), 
+                         id = undefined :: integer()}).
 
 %% struct mt_post
 

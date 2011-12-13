@@ -23,7 +23,7 @@ struct_info('mt_comment') ->
 ;
 
 struct_info('mt_comment_ref') ->
-  {struct, [{1, {list, i32}}, {2, string}]}
+  {struct, [{1, {list, i32}}, {2, string}, {3, i32}]}
 ;
 
 struct_info('mt_post') ->
@@ -69,7 +69,7 @@ struct_info_ext('mt_comment') ->
 ;
 
 struct_info_ext('mt_comment_ref') ->
-  {struct, [{1, undefined, {list, i32}, 'parents', []}, {2, undefined, string, 'comment_key', undefined}]}
+  {struct, [{1, undefined, {list, i32}, 'parents', []}, {2, undefined, string, 'comment_key', undefined}, {3, optional, i32, 'id', undefined}]}
 ;
 
 struct_info_ext('mt_post') ->

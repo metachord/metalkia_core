@@ -6,13 +6,13 @@
 -include_lib("metalkia_core/include/mt_log.hrl").
 -include_lib("metalkia_core/include/mt_util.hrl").
 
-send(email, To, {From, Subj, Text}) when
+send(email, To, {From, Subj, Text}, Headers) when
   is_list(To) orelse is_binary(To) ->
-  email(To, From, Subj, Text);
-send(email, #mt_person{email = To}, {From, Subj, Text}) ->
-  email(To, From, Subj, Text).
+  email(To, From, Subj, Text, Headers);
+send(email, #mt_person{email = To}, {From, Subj, Text}, Headers) ->
+  email(To, From, Subj, Text, Headers).
 
-email(To, From, Subj, Data) ->
+email(To, From, Subj, Data, Headers) ->
   ?DBG("Send mail to ~p", [From]),
 
   Enq =
@@ -24,7 +24,8 @@ email(To, From, Subj, Data) ->
   "From: ~ts\n"
   "Subject: ~ts\n"
   "X-Mailer: Metalkia Email Notify\n"
-  "Date: " ++ httpd_util:rfc1123_date() ++ "\n",
+  "Date: " ++ httpd_util:rfc1123_date() ++ "\n" ++
+  lists:flatten([io_lib:format("~s: ~ts\n", [N, V]) || {N, V} <- Headers]),
 
   Message =
   case Data of

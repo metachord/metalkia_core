@@ -87,7 +87,16 @@ sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{na
   %% Send notifications
   NotifyText = mtws_sanitizer:sanitize("text", Body),
   NotifyHtml = mtws_sanitizer:sanitize("html", Body),
-  [mtc_notify:send(email, PersonForNotify, {"noreply@metalkia.com", "Notification", {NotifyText, NotifyHtml}})
+  Subject = "Reply on #" ++ ?a2l(PostId),
+  InReplyTo = iolist_to_binary(
+    [
+      "<", "comment-", ?a2l(PostId),
+      case lists:reverse(PrevParents) of [] -> []; [ParId|_] -> ["-", ?a2l(ParId)] end,
+      "@metalkia.com", ">"
+    ]
+  ),
+  Headers = [{"In-Reply-To", InReplyTo}],
+  [mtc_notify:send(email, PersonForNotify, {"noreply@metalkia.com", Subject, {NotifyText, NotifyHtml}}, Headers)
   || #mt_person{} = PersonForNotify <-
     [sget(mt_person, NId)
       || NId <- lists:usort([PostAuthor | [IdForNotify

@@ -157,6 +157,8 @@ sget(mt_cname = StructName, Key) ->
 sget(tags, UserId, Tag) ->
   TagsBucket = iolist_to_binary([UserId, "-", "tags"]),
   case mtriak:get_obj_value(TagsBucket, Tag) of
+    {Result} when is_list(Result) ->
+      Result;
     Result when is_list(Result) ->
       Result;
     _ ->

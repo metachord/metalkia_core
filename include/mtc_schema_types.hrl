@@ -5,6 +5,11 @@
 -define(mtc_schema_Mt_gender_MALE, 1).
 -define(mtc_schema_Mt_gender_FEMALE, 2).
 
+%% struct mt_google_analytics
+
+-record(mt_google_analytics, {account = undefined :: string(), 
+                              host = undefined :: string()}).
+
 %% struct mt_person
 
 -record(mt_person, {id = undefined :: string(), 
@@ -15,7 +20,8 @@
                     facebook_id = undefined :: string(), 
                     twitter_id = undefined :: string(), 
                     posts_list_key = undefined :: string(), 
-                    comments_list_key = undefined :: string()}).
+                    comments_list_key = undefined :: string(), 
+                    google_analytics = #mt_google_analytics{} :: #mt_google_analytics{}}).
 
 %% struct mt_author
 
@@ -103,6 +109,7 @@
                    title = undefined :: string(), 
                    owner = undefined :: string(), 
                    streams = [] :: list(), 
-                   logo = undefined :: string()}).
+                   logo = undefined :: string(), 
+                   google_analytics = #mt_google_analytics{} :: #mt_google_analytics{}}).
 
 -endif.

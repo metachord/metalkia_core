@@ -10,6 +10,11 @@ enum Mt_gender {
   FEMALE    = 2
 }
 
+struct Mt_google_analytics {
+  1:  binary               account,
+  2:  binary               host,
+}
+
 struct Mt_person {
   1:  PersonId               id,
   2:  binary                 username,
@@ -20,6 +25,7 @@ struct Mt_person {
   7:  optional binary        twitter_id,
   8:  binary                 posts_list_key,
   9:  binary                 comments_list_key,
+  10: optional Mt_google_analytics  google_analytics,
 }
 
 struct Mt_author {
@@ -110,5 +116,6 @@ struct Mt_cname {
   2:  binary                title,
   3:  binary                owner,
   4:  list<Mt_stream>       streams,
-  5:  optional binary       logo
+  5:  optional binary       logo,
+  6:  optional Mt_google_analytics  google_analytics,
 }

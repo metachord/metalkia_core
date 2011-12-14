@@ -15,7 +15,7 @@ send(_, _, _, _) ->
   ok.
 
 email(To, From, Subj, Data, Headers) ->
-  ?DBG("Send mail to ~p", [From]),
+  ?DBG("Send mail to ~p", [To]),
 
   Enq =
   fun(T) ->

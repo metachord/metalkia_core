@@ -64,6 +64,7 @@ struct Mt_post {
   8:  optional binary         client,
   9:  list<binary>            tags,
   10: list<binary>            circles,
+  11: optional binary         title,
 }
 
 struct Mt_fb_friend {

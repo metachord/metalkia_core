@@ -56,7 +56,8 @@
                   origin = undefined :: string(), 
                   client = undefined :: string(), 
                   tags = [] :: list(), 
-                  circles = [] :: list()}).
+                  circles = [] :: list(), 
+                  title = undefined :: string()}).
 
 %% struct mt_fb_friend
 

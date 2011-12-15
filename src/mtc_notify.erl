@@ -72,3 +72,45 @@ email(To, From, Subj, Data, Headers) ->
   Port = open_port({spawn, mtc:get_env(sendmail, "/usr/sbin/sendmail -t")}, [use_stdio, exit_status, binary]),
   port_command(Port, unicode:characters_to_binary(Message)),
   port_close(Port).
+
+new_comment(#mt_post{id = PostId, author = #mt_author{name = PostAuthor}, comments = CommentRefs}, #mt_comment{id = CommentId, parents = Parents, body = CommentBody}) ->
+
+  %% TODO: add message composer system
+  NotifyBody = iolist_to_binary(
+    [
+      CommentBody,
+      "\n"
+      "<p><a href=\"" ++ mtws_common:user_blog(PostAuthor, ["/post/", ?a2l(PostId)], [], [?a2l(CommentId)]) ++ "\">"
+      "Link"
+      "</a></p>"
+  ]),
+
+  NotifyText = mtws_sanitizer:sanitize("text", NotifyBody),
+  NotifyHtml = mtws_sanitizer:sanitize("html", NotifyBody),
+  Subject = "Reply on #" ++ ?a2l(PostId),
+
+  PrevParents =
+  case lists:reverse(Parents) of
+    [] -> [];
+    [_|PrevParentsRev] -> lists:reverse(PrevParentsRev)
+  end,
+
+  InReplyTo = iolist_to_binary(
+    [
+      "<", "comment-", ?a2l(PostId),
+      case lists:reverse(PrevParents) of [] -> []; [ParId|_] -> ["-", ?a2l(ParId)] end,
+      "@" ++ mtc:get_env(mail_domain), ">"
+    ]
+  ),
+  Headers = [{"In-Reply-To", InReplyTo}],
+
+  Persons = [mtc_entry:sget(mt_person, NId)
+  || NId <- lists:usort([PostAuthor | [IdForNotify
+    || #mt_comment{author = #mt_author{id = IdForNotify}} <-
+      %%
+      [mtc_entry:sget(mt_comment, CKey)
+        || CId <- PrevParents, #mt_comment_ref{id = RefId, comment_key = CKey} <-
+          CommentRefs, CId =:= RefId]]])],
+
+
+  [mtc_notify:send(email, PersonForNotify, {"noreply@metalkia.com", Subject, {NotifyText, NotifyHtml}}, Headers) || #mt_person{} = PersonForNotify <- Persons].

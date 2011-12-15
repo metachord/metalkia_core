@@ -58,14 +58,14 @@ sput(#mt_post{author = #mt_author{id = UserId}, tags = Tags} = Post) ->
   mtriak:put_obj_value(undefined, PostId, UserPostsBucket, PostId),
 
   PostId;
-sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{name = Author}, body = Body} = Comment) ->
+sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{name = Author}} = Comment) ->
   PostBucket = bucket_of_struct(mt_post),
 
   %% Create key for comment: <post id> ++ "-" ++ <timestamp> ++ "-" ++ <comment author>
   %% If users sends more than one comment per seconds it is obviously bad
   DbPid = mtriak:get_pid(),
   {PostIo, Object} = mtriak:get_obj_value_to_modify(DbPid, PostBucket, PostId),
-  #mt_post{comments_cnt = CommCnt, comments = CommentRefs, author = #mt_author{id = PostAuthor}} = Post =
+  #mt_post{comments_cnt = CommCnt, comments = CommentRefs} = Post =
     mtc_thrift:read(mt_post, PostIo),
 
   Timestamp = mtc_util:timestamp(),
@@ -81,31 +81,8 @@ sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{na
   CommentRef = #mt_comment_ref{parents = NewParents, comment_key = CommentKey, id = NewId},
   NewPost = Post#mt_post{comments_cnt = NewId, comments = CommentRefs++[CommentRef]},
   mtriak:put_obj_value(DbPid, Object, mtc_thrift:write(NewPost), PostBucket, PostId),
-
   mtriak:put_obj_value(undefined, mtc_thrift:write(NewComment), bucket_of_struct(mt_comment), CommentKey),
-
-  %% Send notifications
-  NotifyText = mtws_sanitizer:sanitize("text", Body),
-  NotifyHtml = mtws_sanitizer:sanitize("html", Body),
-  Subject = "Reply on #" ++ ?a2l(PostId),
-  InReplyTo = iolist_to_binary(
-    [
-      "<", "comment-", ?a2l(PostId),
-      case lists:reverse(PrevParents) of [] -> []; [ParId|_] -> ["-", ?a2l(ParId)] end,
-      "@metalkia.com", ">"
-    ]
-  ),
-  Headers = [{"In-Reply-To", InReplyTo}],
-  [mtc_notify:send(email, PersonForNotify, {"noreply@metalkia.com", Subject, {NotifyText, NotifyHtml}}, Headers)
-  || #mt_person{} = PersonForNotify <-
-    [sget(mt_person, NId)
-      || NId <- lists:usort([PostAuthor | [IdForNotify
-        || #mt_comment{author = #mt_author{id = IdForNotify}} <-
-          %%
-          [sget(mt_comment, CKey)
-            || CId <- PrevParents, #mt_comment_ref{id = RefId, comment_key = CKey} <-
-              CommentRefs, CId =:= RefId]]])]],
-
+  mtc_notify:new_comment(NewPost, NewComment),
   ?a2b(NewId);
 sput(#mt_facebook{id = FbId} = FbProfile) ->
   Data = mtc_thrift:write(FbProfile),

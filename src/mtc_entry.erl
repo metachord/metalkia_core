@@ -190,9 +190,9 @@ supdate(#mt_post{id = Id} = Post) ->
 supdate(#mt_facebook{id = Id} = Profile) ->
   {Status, NewProfile} =
     case sget(mt_facebook, Id) of
-      #mt_facebook{metalkia_id = MetalkiaId} = _StoredProfile ->
+      #mt_facebook{} = _StoredProfile ->
         %% TODO: Compare Profile and StoredProfile
-        {updated, Profile#mt_facebook{metalkia_id = MetalkiaId}};
+        {updated, Profile#mt_facebook{}};
       _ ->
         {new, Profile}
     end,
@@ -202,9 +202,9 @@ supdate(#mt_facebook{id = Id} = Profile) ->
 supdate(#mt_twitter{id = Id} = Profile) ->
   {Status, NewProfile} =
     case sget(mt_twitter, Id) of
-      #mt_twitter{metalkia_id = MetalkiaId} = _StoredProfile ->
+      #mt_twitter{} = _StoredProfile ->
         %% TODO: Compare Profile and StoredProfile
-        {updated, Profile#mt_twitter{metalkia_id = MetalkiaId}};
+        {updated, Profile#mt_twitter{}};
       _ ->
         {new, Profile}
     end,

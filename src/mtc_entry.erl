@@ -21,6 +21,28 @@
          counter/1
         ]).
 
+update_tags(UserId, PostId, Tags) ->
+  DbPid = mtriak:get_pid(),
+  TagsBucket = iolist_to_binary([UserId, "-", "tags"]),
+  [begin
+     {PostIdsIo, Object} = mtriak:get_obj_value_to_modify(DbPid, TagsBucket, Tag),
+     OldPosts =
+       if
+         is_tuple(PostIdsIo) andalso size(PostIdsIo) =:= 1 ->
+           element(1, PostIdsIo);
+         is_list(PostIdsIo) ->
+           PostIdsIo;
+         true -> []
+       end,
+     IsMember = lists:member(PostId, OldPosts),
+     if
+       IsMember ->
+         mtriak:put_obj_value(DbPid, Object, {OldPosts}, TagsBucket, Tag);
+       true ->
+         mtriak:put_obj_value(DbPid, Object, {[PostId | OldPosts]}, TagsBucket, Tag)
+     end
+   end || Tag <- Tags].
+
 sput(#mt_person{username = UserName} = Person) ->
   PersonId = UserName,
   NewPerson = Person#mt_person{
@@ -41,20 +63,7 @@ sput(#mt_post{author = #mt_author{id = UserId}, tags = Tags} = Post) ->
   Data = mtc_thrift:write(NewPost),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_post), PostId),
 
-  DbPid = mtriak:get_pid(),
-  TagsBucket = iolist_to_binary([UserId, "-", "tags"]),
-  [begin
-    {PostIdsIo, Object} = mtriak:get_obj_value_to_modify(DbPid, TagsBucket, Tag),
-    OldPosts =
-    if
-      is_tuple(PostIdsIo) andalso size(PostIdsIo) =:= 1 ->
-        element(1, PostIdsIo);
-      is_list(PostIdsIo) ->
-        PostIdsIo;
-      true -> []
-    end,
-    mtriak:put_obj_value(DbPid, Object, {[PostId | OldPosts]}, TagsBucket, Tag)
-  end || Tag <- Tags],
+  update_tags(UserId, PostId, Tags),
 
   UserPostsBucket = iolist_to_binary([UserId, "-", "posts"]),
   mtriak:put_obj_value(undefined, PostId, UserPostsBucket, PostId),
@@ -177,11 +186,13 @@ supdate(#mt_person{id = Id} = Profile) ->
   Data = mtc_thrift:write(NewProfile),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_person), Id),
   {Status, NewProfile};
-supdate(#mt_post{id = Id} = Post) ->
+supdate(#mt_post{id = Id, author = #mt_author{id = UserId}, tags = Tags} = Post) ->
   {Status, NewPost} =
     case sget(mt_post, Id) of
       #mt_post{} = _StoredPost ->
         %% TODO: Compare Post and StoredPost
+        %% TODO: Also remove removed tags!
+        update_tags(UserId, Id, Tags),
         {updated, Post#mt_post{}};
       _ ->
         {new, Post}

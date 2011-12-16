@@ -6,6 +6,7 @@
          a2b/1,
          a2l/1,
          a2i/1,
+         io2b/1,
          a2gender/1,
          timestamp/0,
          get_env/3,
@@ -32,6 +33,9 @@ a2i(A) when is_list(A) -> list_to_integer(A);
 a2i(A) when is_binary(A) -> a2i(binary_to_list(A));
 a2i(null) -> 0;
 a2i(_) -> throw(badarg).
+
+io2b(IoList) ->
+  iolist_to_binary(IoList).
 
 a2gender(A) ->
   case A of

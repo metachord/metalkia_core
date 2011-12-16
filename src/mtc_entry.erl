@@ -21,6 +21,11 @@
          counter/1
         ]).
 
+%% Structure fixes
+-export([
+         fix_assign_cnames_to_profiles/0
+        ]).
+
 update_tags(UserId, PostId, Tags) ->
   DbPid = mtriak:get_pid(),
   TagsBucket = iolist_to_binary([UserId, "-", "tags"]),
@@ -262,3 +267,15 @@ bucket_of_struct(StructName) ->
     mt_twitter -> <<"twitter">>;
     mt_cname -> <<"cnames">>
   end.
+
+%% Structure fixes
+
+%% Store Cnames in profile of its owner
+fix_assign_cnames_to_profiles() ->
+  {ok, Cnames} = mtriak:list_keys(<<"cnames">>),
+  [begin Profile = mtc_entry:sget(mt_person, Person), mtc_entry:supdate(Profile#mt_person{cnames = ListCnames}) end ||
+    {Person, ListCnames} <-
+      lists:foldl(fun({Key, Val}, L) ->
+                      lists:keystore(Key, 1, L, {Key, [Val | proplists:get_value(Key, L, [])]})
+                  end, [],
+                  [{Owner, CName} || #mt_cname{cname = CName, owner = Owner} <- [mtc_entry:sget(mt_cname, C) || C <- Cnames]])].

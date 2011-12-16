@@ -73,20 +73,11 @@ email(To, From, Subj, Data, Headers) ->
   port_command(Port, unicode:characters_to_binary(Message)),
   port_close(Port).
 
-new_comment(#mt_post{id = PostId, author = #mt_author{name = PostAuthor}, comments = CommentRefs}, #mt_comment{id = CommentId, parents = Parents, body = CommentBody}) ->
+new_comment(
+  #mt_post{id = PostId, author = #mt_author{id = PostAuthorId}, comments = CommentRefs},
+  #mt_comment{id = CommentId, parents = Parents, author = #mt_author{id = CommentAuthorId}, body = CommentBody}) ->
 
   %% TODO: add message composer system
-  NotifyBody = iolist_to_binary(
-    [
-      CommentBody,
-      "\n"
-      "<p><a href=\"" ++ mtws_common:user_blog(PostAuthor, ["/post/", ?a2l(PostId)], [], [?a2l(CommentId)]) ++ "\">"
-      "Link"
-      "</a></p>"
-  ]),
-
-  NotifyText = mtws_sanitizer:sanitize("text", NotifyBody),
-  NotifyHtml = mtws_sanitizer:sanitize("html", NotifyBody),
   Subject = "Reply on #" ++ ?a2l(PostId),
 
   PrevParents =
@@ -94,6 +85,68 @@ new_comment(#mt_post{id = PostId, author = #mt_author{name = PostAuthor}, commen
     [] -> [];
     [_|PrevParentsRev] -> lists:reverse(PrevParentsRev)
   end,
+
+  Blockquote = fun(T) ->
+    [
+      "<blockquote style='border-left: #000040 2px solid; margin-left: 0px; margin-right: 0px; padding-left: 15px; padding-right: 0px'>",
+      T,
+      "</blockquote>"
+    ]
+  end,
+
+  ParentHeader =
+  case lists:reverse(PrevParents) of
+    [] ->
+      ?DBG("Empty previous parents list", []),
+      %% Reply on post
+      [];
+    [ParentCid|_] ->
+      %% Reply on comment
+      ?DBG("ParentCid: ~p", [ParentCid]),
+      [ParentCKey] = [PKey || #mt_comment_ref{id = PCid, comment_key = PKey} <- CommentRefs, PCid =:= ParentCid],
+      case mtc_entry:sget(mt_comment, ?a2b(ParentCKey)) of
+        #mt_comment{author = #mt_author{id = ParentAuthorId}, body = ParentCommentBody} ->
+          case mtc_entry:sget(mt_person, ParentAuthorId) of
+            #mt_person{name = ParentAuthorName} ->
+              iolist_to_binary([
+                "<a href=\"" ++ mtws_common:user_blog(ParentAuthorId, ["/profile"]) ++ "\">",
+                if (ParentAuthorName =/= undefined) andalso (ParentAuthorName =/= <<>>) -> ParentAuthorName; true -> ParentAuthorId end,
+                "</a> wrote:",
+                Blockquote(ParentCommentBody)
+              ]);
+            _ -> ""
+          end;
+        _ -> ""
+      end
+  end,
+
+
+  Header =
+  case mtc_entry:sget(mt_person, CommentAuthorId) of
+    #mt_person{name = CommentAuthorName} ->
+      iolist_to_binary([
+        "<a href=\"" ++ mtws_common:user_blog(CommentAuthorId, ["/profile"]) ++ "\">",
+        if CommentAuthorName =/= undefined -> CommentAuthorName; true -> CommentAuthorId end,
+        "</a> replied:",
+        Blockquote(CommentBody)
+      ]);
+    _ -> ""
+  end,
+
+  NotifyBody = iolist_to_binary(
+    [
+      ParentHeader,
+      "<br />",
+      Header,
+      "\n"
+      "<p><a href=\"" ++ mtws_common:user_blog(PostAuthorId, ["/post/", ?a2l(PostId)], [], [?a2l(CommentId)]) ++ "\">"
+      "Link"
+      "</a></p>"
+  ]),
+
+  NotifyText = mtws_sanitizer:sanitize("text", NotifyBody),
+  NotifyHtml = NotifyBody,
+
 
   InReplyTo = iolist_to_binary(
     [
@@ -105,7 +158,7 @@ new_comment(#mt_post{id = PostId, author = #mt_author{name = PostAuthor}, commen
   Headers = [{"In-Reply-To", InReplyTo}],
 
   Persons = [mtc_entry:sget(mt_person, NId)
-  || NId <- lists:usort([PostAuthor | [IdForNotify
+  || NId <- lists:usort([PostAuthorId | [IdForNotify
     || #mt_comment{author = #mt_author{id = IdForNotify}} <-
       %%
       [mtc_entry:sget(mt_comment, CKey)

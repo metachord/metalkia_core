@@ -200,24 +200,28 @@ supdate(#mt_post{id = Id, author = #mt_author{id = UserId}, tags = Tags} = Post)
   Data = mtc_thrift:write(NewPost#mt_post{last_mod = mtc_util:timestamp()}),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_post), Id),
   {Status, NewPost};
-supdate(#mt_facebook{id = Id} = Profile) ->
+supdate(#mt_facebook{id = Id, metalkia_id = MtId} = Profile) ->
   {Status, NewProfile} =
     case sget(mt_facebook, Id) of
-      #mt_facebook{} = _StoredProfile ->
+      #mt_facebook{metalkia_id = StoredMtId} = _StoredProfile ->
         %% TODO: Compare Profile and StoredProfile
-        {updated, Profile#mt_facebook{}};
+        {updated, Profile#mt_facebook{
+                    metalkia_id = if MtId =:= undefined -> StoredMtId; true -> MtId end
+                   }};
       _ ->
         {new, Profile}
     end,
   Data = mtc_thrift:write(NewProfile),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_facebook), Id),
   {Status, NewProfile};
-supdate(#mt_twitter{id = Id} = Profile) ->
+supdate(#mt_twitter{id = Id, metalkia_id = MtId} = Profile) ->
   {Status, NewProfile} =
     case sget(mt_twitter, Id) of
-      #mt_twitter{} = _StoredProfile ->
+      #mt_twitter{metalkia_id = StoredMtId} = _StoredProfile ->
         %% TODO: Compare Profile and StoredProfile
-        {updated, Profile#mt_twitter{}};
+        {updated, Profile#mt_twitter{
+                    metalkia_id = if MtId =:= undefined -> StoredMtId; true -> MtId end
+                   }};
       _ ->
         {new, Profile}
     end,

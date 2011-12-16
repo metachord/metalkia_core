@@ -21,7 +21,8 @@
                     twitter_id = undefined :: string(), 
                     posts_list_key = undefined :: string(), 
                     comments_list_key = undefined :: string(), 
-                    google_analytics = #mt_google_analytics{} :: #mt_google_analytics{}}).
+                    google_analytics = #mt_google_analytics{} :: #mt_google_analytics{}, 
+                    cnames = [] :: list()}).
 
 %% struct mt_author
 

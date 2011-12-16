@@ -26,6 +26,7 @@ struct Mt_person {
   8:  binary                 posts_list_key,
   9:  binary                 comments_list_key,
   10: optional Mt_google_analytics  google_analytics,
+  11: optional list<binary>  cnames,
 }
 
 struct Mt_author {

@@ -57,7 +57,8 @@
                   client = undefined :: string(), 
                   tags = [] :: list(), 
                   circles = [] :: list(), 
-                  title = undefined :: string()}).
+                  title = undefined :: string(), 
+                  last_mod = undefined :: integer()}).
 
 %% struct mt_fb_friend
 

@@ -32,9 +32,11 @@ sput(#mt_person{username = UserName} = Person) ->
 sput(#mt_post{author = #mt_author{id = UserId}, tags = Tags} = Post) ->
   Id = counter(mt_post),
   PostId = int_to_key(Id),
+  Timestamp = mtc_util:timestamp(),
   NewPost = Post#mt_post{
               id = PostId,
-              timestamp = mtc_util:timestamp()
+              timestamp = Timestamp,
+              last_mod = Timestamp
              },
   Data = mtc_thrift:write(NewPost),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_post), PostId),
@@ -184,7 +186,7 @@ supdate(#mt_post{id = Id} = Post) ->
       _ ->
         {new, Post}
     end,
-  Data = mtc_thrift:write(NewPost),
+  Data = mtc_thrift:write(NewPost#mt_post{last_mod = mtc_util:timestamp()}),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_post), Id),
   {Status, NewPost};
 supdate(#mt_facebook{id = Id} = Profile) ->

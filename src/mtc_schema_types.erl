@@ -31,7 +31,7 @@ struct_info('mt_comment_ref') ->
 ;
 
 struct_info('mt_post') ->
-  {struct, [{1, string}, {2, {struct, {'mtc_schema_types', 'mt_author'}}}, {3, string}, {4, i64}, {5, i32}, {6, {list, {struct, {'mtc_schema_types', 'mt_comment_ref'}}}}, {7, string}, {8, string}, {9, {list, string}}, {10, {list, string}}, {11, string}]}
+  {struct, [{1, string}, {2, {struct, {'mtc_schema_types', 'mt_author'}}}, {3, string}, {4, i64}, {5, i32}, {6, {list, {struct, {'mtc_schema_types', 'mt_comment_ref'}}}}, {7, string}, {8, string}, {9, {list, string}}, {10, {list, string}}, {11, string}, {12, i64}]}
 ;
 
 struct_info('mt_fb_friend') ->
@@ -81,7 +81,7 @@ struct_info_ext('mt_comment_ref') ->
 ;
 
 struct_info_ext('mt_post') ->
-  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, {struct, {'mtc_schema_types', 'mt_author'}}, 'author', #mt_author{}}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, undefined, i32, 'comments_cnt', 0}, {6, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment_ref'}}}, 'comments', []}, {7, optional, string, 'origin', undefined}, {8, optional, string, 'client', undefined}, {9, undefined, {list, string}, 'tags', []}, {10, undefined, {list, string}, 'circles', []}, {11, optional, string, 'title', undefined}]}
+  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, {struct, {'mtc_schema_types', 'mt_author'}}, 'author', #mt_author{}}, {3, undefined, string, 'body', undefined}, {4, undefined, i64, 'timestamp', undefined}, {5, undefined, i32, 'comments_cnt', 0}, {6, undefined, {list, {struct, {'mtc_schema_types', 'mt_comment_ref'}}}, 'comments', []}, {7, optional, string, 'origin', undefined}, {8, optional, string, 'client', undefined}, {9, undefined, {list, string}, 'tags', []}, {10, undefined, {list, string}, 'circles', []}, {11, optional, string, 'title', undefined}, {12, optional, i64, 'last_mod', undefined}]}
 ;
 
 struct_info_ext('mt_fb_friend') ->

@@ -65,6 +65,7 @@ struct Mt_post {
   9:  list<binary>            tags,
   10: list<binary>            circles,
   11: optional binary         title,
+  12: optional i64            last_mod
 }
 
 struct Mt_fb_friend {

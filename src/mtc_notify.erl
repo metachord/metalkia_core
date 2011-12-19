@@ -157,13 +157,9 @@ new_comment(
   ),
   Headers = [{"In-Reply-To", InReplyTo}],
 
-  Persons = [mtc_entry:sget(mt_person, NId)
-  || NId <- lists:usort([PostAuthorId | [IdForNotify
-    || #mt_comment{author = #mt_author{id = IdForNotify}} <-
-      %%
-      [mtc_entry:sget(mt_comment, CKey)
+  [mtc_notify:send(email, PersonForNotify, {"noreply@metalkia.com", Subject, {NotifyText, NotifyHtml}}, Headers)
+  || #mt_person{} = PersonForNotify <- [mtc_entry:sget(mt_person, NId)
+    || NId <- lists:usort([PostAuthorId | [IdForNotify
+      || #mt_comment{author = #mt_author{id = IdForNotify}} <- [mtc_entry:sget(mt_comment, CKey)
         || CId <- PrevParents, #mt_comment_ref{id = RefId, comment_key = CKey} <-
-          CommentRefs, CId =:= RefId]]])],
-
-
-  [mtc_notify:send(email, PersonForNotify, {"noreply@metalkia.com", Subject, {NotifyText, NotifyHtml}}, Headers) || #mt_person{} = PersonForNotify <- Persons].
+          CommentRefs, CId =:= RefId]]]), NId =/= CommentAuthorId]].

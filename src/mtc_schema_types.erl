@@ -55,7 +55,7 @@ struct_info('mt_stream') ->
 ;
 
 struct_info('mt_cname') ->
-  {struct, [{1, string}, {2, string}, {3, string}, {4, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}}, {5, string}, {6, {struct, {'mtc_schema_types', 'mt_google_analytics'}}}]}
+  {struct, [{1, string}, {2, string}, {3, string}, {4, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}}, {5, string}, {6, {struct, {'mtc_schema_types', 'mt_google_analytics'}}}, {7, i32}]}
 ;
 
 struct_info('i am a dummy struct') -> undefined.
@@ -105,7 +105,7 @@ struct_info_ext('mt_stream') ->
 ;
 
 struct_info_ext('mt_cname') ->
-  {struct, [{1, undefined, string, 'cname', undefined}, {2, undefined, string, 'title', undefined}, {3, undefined, string, 'owner', undefined}, {4, undefined, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}, 'streams', []}, {5, optional, string, 'logo', undefined}, {6, optional, {struct, {'mtc_schema_types', 'mt_google_analytics'}}, 'google_analytics', #mt_google_analytics{}}]}
+  {struct, [{1, undefined, string, 'cname', undefined}, {2, undefined, string, 'title', undefined}, {3, undefined, string, 'owner', undefined}, {4, undefined, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}, 'streams', []}, {5, optional, string, 'logo', undefined}, {6, optional, {struct, {'mtc_schema_types', 'mt_google_analytics'}}, 'google_analytics', #mt_google_analytics{}}, {7, undefined, i32, 'type',   1}]}
 ;
 
 struct_info_ext('i am a dummy struct') -> undefined.

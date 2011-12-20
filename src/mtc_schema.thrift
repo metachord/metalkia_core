@@ -114,6 +114,12 @@ struct Mt_stream {
   2:  list<binary>          tags
 }
 
+enum Mt_cname_type {
+  UNKNOWN     = 0,
+  CNAME       = 1,
+  LOCAL       = 2,
+}
+
 struct Mt_cname {
   1:  binary                cname,
   2:  binary                title,
@@ -121,4 +127,5 @@ struct Mt_cname {
   4:  list<Mt_stream>       streams,
   5:  optional binary       logo,
   6:  optional Mt_google_analytics  google_analytics,
+  7:  Mt_cname_type         type = Mt_cname_type.CNAME,
 }

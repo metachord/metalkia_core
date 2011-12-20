@@ -5,6 +5,10 @@
 -define(mtc_schema_Mt_gender_MALE, 1).
 -define(mtc_schema_Mt_gender_FEMALE, 2).
 
+-define(mtc_schema_Mt_cname_type_UNKNOWN, 0).
+-define(mtc_schema_Mt_cname_type_CNAME, 1).
+-define(mtc_schema_Mt_cname_type_LOCAL, 2).
+
 %% struct mt_google_analytics
 
 -record(mt_google_analytics, {account = undefined :: string(), 
@@ -113,6 +117,7 @@
                    owner = undefined :: string(), 
                    streams = [] :: list(), 
                    logo = undefined :: string(), 
-                   google_analytics = #mt_google_analytics{} :: #mt_google_analytics{}}).
+                   google_analytics = #mt_google_analytics{} :: #mt_google_analytics{}, 
+                   type = 1 :: integer()}).
 
 -endif.

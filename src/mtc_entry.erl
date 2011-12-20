@@ -108,9 +108,16 @@ sput(#mt_twitter{id = TwId} = TwProfile) ->
   Data = mtc_thrift:write(TwProfile),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_twitter), TwId),
   TwId;
-sput(#mt_cname{cname = Name} = CName) ->
+sput(#mt_cname{cname = Name, owner = UserId, type = Type} = CName) ->
   Data = mtc_thrift:write(CName),
-  ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_cname), Name),
+  CnameBucket =
+    case Type of
+      ?mtc_schema_Mt_cname_type_LOCAL ->
+        iolist_to_binary([UserId, "-", "blogs"]);
+      _ ->
+        bucket_of_struct(mt_cname)
+    end,
+  ok = mtriak:put_obj_value(undefined, Data, CnameBucket, Name),
   Name.
 
 sget(mt_person = StructName, Key) ->
@@ -159,7 +166,14 @@ sget(mt_twitter = StructName, Key) ->
       Other
   end;
 sget(mt_cname = StructName, Key) ->
-  case mtriak:get_obj_value(bucket_of_struct(StructName), Key) of
+  {CnameBucket, CnameKey} =
+    case Key of
+      {UserId, CKey} ->
+        {iolist_to_binary([UserId, "-", "blogs"]), CKey};
+      _ ->
+        {bucket_of_struct(StructName), Key}
+    end,
+  case mtriak:get_obj_value(CnameBucket, CnameKey) of
     Io when is_list(Io) orelse
             is_binary(Io) ->
       Result = mtc_thrift:read(StructName, Io),

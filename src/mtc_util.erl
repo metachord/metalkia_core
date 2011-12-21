@@ -12,7 +12,8 @@
          get_env/3,
          uri_encode/1,
          uri_decode/1,
-         rand_str/1
+         rand_str/1,
+         ts2rfc3339/1
         ]).
 
 
@@ -71,3 +72,8 @@ rand_str(Size) ->
       {Ret, _} = lists:split(Size, Str),
       Ret
   end.
+
+ts2rfc3339(Ts) ->
+  TsNow = {Ts div 1000000, Ts rem 1000000, 0},
+  {{Y, M, D}, {H, Min, Sec}} = calendar:now_to_local_time(TsNow),
+  io2b(io_lib:format("~4..0b-~2..0b-~2..0bT~2..0b:~2..0b:~2..0bZ", [Y, M, D, H, Min, Sec])).

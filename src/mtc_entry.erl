@@ -84,7 +84,11 @@ sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{na
   #mt_post{comments_cnt = CommCnt, comments = CommentRefs} = Post =
     mtc_thrift:read(mt_post, PostIo),
 
-  Timestamp = mtc_util:timestamp(),
+  Timestamp =
+    if
+      Comment#mt_comment.timestamp == undefined -> mtc_util:timestamp();
+      true -> Comment#mt_comment.timestamp
+    end,
 
   NewId = CommCnt+1,
   NewParents = PrevParents ++ [NewId],

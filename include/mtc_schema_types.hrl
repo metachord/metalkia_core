@@ -11,113 +11,113 @@
 
 %% struct mt_google_analytics
 
--record(mt_google_analytics, {account = undefined :: string(), 
-                              host = undefined :: string()}).
+-record(mt_google_analytics, {account = <<>> :: binary(), 
+                              host = <<>> :: binary()}).
 
 %% struct mt_person
 
--record(mt_person, {id = undefined :: string(), 
-                    username = undefined :: string(), 
-                    password_sha1 = undefined :: string(), 
-                    name = undefined :: string(), 
-                    email = undefined :: string(), 
-                    facebook_id = undefined :: string(), 
-                    twitter_id = undefined :: string(), 
-                    posts_list_key = undefined :: string(), 
-                    comments_list_key = undefined :: string(), 
-                    google_analytics = #mt_google_analytics{} :: #mt_google_analytics{}, 
-                    cnames = [] :: list()}).
+-record(mt_person, {id = undefined :: binary(), 
+                    username = <<>> :: binary(), 
+                    password_sha1 = undefined :: undefined | binary(), 
+                    name = undefined :: undefined | binary(), 
+                    email = <<>> :: binary(), 
+                    facebook_id = undefined :: undefined | binary(), 
+                    twitter_id = undefined :: undefined | binary(), 
+                    posts_list_key = <<>> :: binary(), 
+                    comments_list_key = <<>> :: binary(), 
+                    google_analytics = undefined :: undefined | #mt_google_analytics{}, 
+                    cnames = undefined :: undefined | list()}).
 
 %% struct mt_author
 
--record(mt_author, {id = undefined :: string(), 
-                    name = undefined :: string()}).
+-record(mt_author, {id = undefined :: binary(), 
+                    name = <<>> :: binary()}).
 
 %% struct mt_comment
 
--record(mt_comment, {post_id = undefined :: string(), 
+-record(mt_comment, {post_id = undefined :: binary(), 
                      id = 0 :: integer(), 
                      parents = [] :: list(), 
                      author = #mt_author{} :: #mt_author{}, 
-                     body = undefined :: string(), 
+                     body = <<>> :: binary(), 
                      timestamp = undefined :: integer(), 
-                     origin = undefined :: string(), 
-                     client = undefined :: string()}).
+                     origin = undefined :: undefined | binary(), 
+                     client = undefined :: undefined | binary()}).
 
 %% struct mt_comment_ref
 
 -record(mt_comment_ref, {parents = [] :: list(), 
-                         comment_key = undefined :: string(), 
-                         id = undefined :: integer()}).
+                         comment_key = <<>> :: binary(), 
+                         id = undefined :: undefined | integer()}).
 
 %% struct mt_post
 
--record(mt_post, {id = undefined :: string(), 
+-record(mt_post, {id = undefined :: binary(), 
                   author = #mt_author{} :: #mt_author{}, 
-                  body = undefined :: string(), 
+                  body = <<>> :: binary(), 
                   timestamp = undefined :: integer(), 
                   comments_cnt = 0 :: integer(), 
                   comments = [] :: list(), 
-                  origin = undefined :: string(), 
-                  client = undefined :: string(), 
+                  origin = undefined :: undefined | binary(), 
+                  client = undefined :: undefined | binary(), 
                   tags = [] :: list(), 
                   circles = [] :: list(), 
-                  title = undefined :: string(), 
-                  last_mod = undefined :: integer()}).
+                  title = undefined :: undefined | binary(), 
+                  last_mod = undefined :: undefined | integer()}).
 
 %% struct mt_fb_friend
 
--record(mt_fb_friend, {id = undefined :: string(), 
-                       name = undefined :: string()}).
+-record(mt_fb_friend, {id = <<>> :: binary(), 
+                       name = <<>> :: binary()}).
 
 %% struct mt_facebook
 
--record(mt_facebook, {id = undefined :: string(), 
-                      name = undefined :: string(), 
-                      first_name = undefined :: string(), 
-                      middle_name = undefined :: string(), 
-                      last_name = undefined :: string(), 
-                      link = undefined :: string(), 
+-record(mt_facebook, {id = <<>> :: binary(), 
+                      name = <<>> :: binary(), 
+                      first_name = undefined :: undefined | binary(), 
+                      middle_name = undefined :: undefined | binary(), 
+                      last_name = undefined :: undefined | binary(), 
+                      link = <<>> :: binary(), 
                       gender = 0 :: integer(), 
-                      email = undefined :: string(), 
+                      email = <<>> :: binary(), 
                       timezone = 0 :: integer(), 
-                      updated_time = undefined :: string(), 
-                      locale = undefined :: string(), 
+                      updated_time = undefined :: undefined | binary(), 
+                      locale = undefined :: undefined | binary(), 
                       friends = [] :: list(), 
-                      username = undefined :: string(), 
-                      metalkia_id = undefined :: string()}).
+                      username = undefined :: undefined | binary(), 
+                      metalkia_id = undefined :: undefined | binary()}).
 
 %% struct mt_tw_friend
 
--record(mt_tw_friend, {id = undefined :: string(), 
-                       name = undefined :: string()}).
+-record(mt_tw_friend, {id = <<>> :: binary(), 
+                       name = undefined :: undefined | binary()}).
 
 %% struct mt_twitter
 
--record(mt_twitter, {id = undefined :: string(), 
-                     screen_name = undefined :: string(), 
-                     name = undefined :: string(), 
-                     description = undefined :: string(), 
-                     url = undefined :: string(), 
-                     timezone = undefined :: string(), 
+-record(mt_twitter, {id = <<>> :: binary(), 
+                     screen_name = <<>> :: binary(), 
+                     name = <<>> :: binary(), 
+                     description = <<>> :: binary(), 
+                     url = <<>> :: binary(), 
+                     timezone = <<>> :: binary(), 
                      utc_offset = undefined :: integer(), 
-                     locale = undefined :: string(), 
+                     locale = <<>> :: binary(), 
                      friends = [] :: list(), 
-                     metalkia_id = undefined :: string()}).
+                     metalkia_id = undefined :: undefined | binary()}).
 
 %% struct mt_stream
 
--record(mt_stream, {username = undefined :: string(), 
+-record(mt_stream, {username = <<>> :: binary(), 
                     tags = [] :: list()}).
 
 %% struct mt_cname
 
--record(mt_cname, {cname = undefined :: string(), 
-                   title = undefined :: string(), 
-                   owner = undefined :: string(), 
+-record(mt_cname, {cname = <<>> :: binary(), 
+                   title = <<>> :: binary(), 
+                   owner = <<>> :: binary(), 
                    streams = [] :: list(), 
-                   logo = undefined :: string(), 
-                   google_analytics = #mt_google_analytics{} :: #mt_google_analytics{}, 
+                   logo = undefined :: undefined | binary(), 
+                   google_analytics = undefined :: undefined | #mt_google_analytics{}, 
                    type = 1 :: integer()}).
 
 -endif.

@@ -5,6 +5,9 @@
 -define(mtc_schema_Mt_gender_MALE, 1).
 -define(mtc_schema_Mt_gender_FEMALE, 2).
 
+-define(mtc_schema_Mt_format_HTML, 0).
+-define(mtc_schema_Mt_format_MARKDOWN, 1).
+
 -define(mtc_schema_Mt_cname_type_UNKNOWN, 0).
 -define(mtc_schema_Mt_cname_type_CNAME, 1).
 -define(mtc_schema_Mt_cname_type_LOCAL, 2).
@@ -42,7 +45,9 @@
                      body = <<>> :: binary(), 
                      timestamp = undefined :: integer(), 
                      origin = undefined :: undefined | binary(), 
-                     client = undefined :: undefined | binary()}).
+                     client = undefined :: undefined | binary(), 
+                     format = 0 :: undefined | integer(), 
+                     body_html = undefined :: undefined | binary()}).
 
 %% struct mt_comment_ref
 
@@ -63,7 +68,9 @@
                   tags = [] :: list(), 
                   circles = [] :: list(), 
                   title = undefined :: undefined | binary(), 
-                  last_mod = undefined :: undefined | integer()}).
+                  last_mod = undefined :: undefined | integer(), 
+                  format = 0 :: undefined | integer(), 
+                  body_html = undefined :: undefined | binary()}).
 
 %% struct mt_fb_friend
 

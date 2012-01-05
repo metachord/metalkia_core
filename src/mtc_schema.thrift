@@ -34,6 +34,11 @@ struct Mt_author {
   2: binary                 name
 }
 
+enum Mt_format {
+  HTML      = 0,
+  MARKDOWN  = 1,
+}
+
 typedef binary PostId
 typedef i32 CommentId
 
@@ -45,7 +50,9 @@ struct Mt_comment {
   5: binary             body,
   6: i64                timestamp,
   7: optional binary    origin,
-  8: optional binary    client
+  8: optional binary    client,
+  9: optional Mt_format format = Mt_format.HTML,
+  10:optional binary    body_html,
 }
 
 struct Mt_comment_ref {
@@ -66,7 +73,9 @@ struct Mt_post {
   9:  list<binary>            tags,
   10: list<binary>            circles,
   11: optional binary         title,
-  12: optional i64            last_mod
+  12: optional i64            last_mod,
+  13: optional Mt_format      format = Mt_format.HTML,
+  14: optional binary         body_html,
 }
 
 struct Mt_fb_friend {

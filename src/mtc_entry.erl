@@ -78,7 +78,7 @@ sput(#mt_post{author = #mt_author{id = UserId}, tags = Tags} = Post, _) ->
   mtriak:put_obj_value(undefined, PostId, UserPostsBucket, PostId),
 
   PostId;
-sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{name = Author}} = Comment, _) ->
+sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{name = Author}} = Comment, CompFun) ->
   PostBucket = bucket_of_struct(mt_post),
 
   %% Create key for comment: <post id> ++ "-" ++ <timestamp> ++ "-" ++ <comment author>
@@ -106,7 +106,7 @@ sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{na
   NewPost = Post#mt_post{comments_cnt = NewId, comments = CommentRefs++[CommentRef]},
   mtriak:put_obj_value(DbPid, Object, mtc_thrift:write(NewPost), PostBucket, PostId),
   mtriak:put_obj_value(undefined, mtc_thrift:write(NewComment), bucket_of_struct(mt_comment), CommentKey),
-  mtc_notify:new_comment(NewPost, NewComment),
+  mtc_notify:new_comment(NewPost, NewComment, CompFun),
   ?a2b(NewId);
 sput(#mt_facebook{id = FbId} = FbProfile, _) ->
   Data = mtc_thrift:write(FbProfile),

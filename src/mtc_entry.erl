@@ -14,6 +14,7 @@
 
 -export([
          sput/1,
+         sput/2,
          sget/2,
          sget/3,
          supdate/1,
@@ -48,7 +49,10 @@ update_tags(UserId, PostId, Tags) ->
      end
    end || Tag <- Tags].
 
-sput(#mt_person{username = UserName} = Person) ->
+sput(S) ->
+  sput(S, undefined).
+
+sput(#mt_person{username = UserName} = Person, _) ->
   PersonId = UserName,
   NewPerson = Person#mt_person{
                 id = PersonId
@@ -56,7 +60,7 @@ sput(#mt_person{username = UserName} = Person) ->
   Data = mtc_thrift:write(NewPerson),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_person), PersonId),
   PersonId;
-sput(#mt_post{author = #mt_author{id = UserId}, tags = Tags} = Post) ->
+sput(#mt_post{author = #mt_author{id = UserId}, tags = Tags} = Post, _) ->
   Id = counter(mt_post),
   PostId = int_to_key(Id),
   Timestamp = mtc_util:timestamp(),
@@ -74,7 +78,7 @@ sput(#mt_post{author = #mt_author{id = UserId}, tags = Tags} = Post) ->
   mtriak:put_obj_value(undefined, PostId, UserPostsBucket, PostId),
 
   PostId;
-sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{name = Author}} = Comment) ->
+sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{name = Author}} = Comment, _) ->
   PostBucket = bucket_of_struct(mt_post),
 
   %% Create key for comment: <post id> ++ "-" ++ <timestamp> ++ "-" ++ <comment author>
@@ -104,15 +108,15 @@ sput(#mt_comment{post_id = PostId, parents = PrevParents, author = #mt_author{na
   mtriak:put_obj_value(undefined, mtc_thrift:write(NewComment), bucket_of_struct(mt_comment), CommentKey),
   mtc_notify:new_comment(NewPost, NewComment),
   ?a2b(NewId);
-sput(#mt_facebook{id = FbId} = FbProfile) ->
+sput(#mt_facebook{id = FbId} = FbProfile, _) ->
   Data = mtc_thrift:write(FbProfile),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_facebook), FbId),
   FbId;
-sput(#mt_twitter{id = TwId} = TwProfile) ->
+sput(#mt_twitter{id = TwId} = TwProfile, _) ->
   Data = mtc_thrift:write(TwProfile),
   ok = mtriak:put_obj_value(undefined, Data, bucket_of_struct(mt_twitter), TwId),
   TwId;
-sput(#mt_cname{cname = Name, owner = UserId, type = Type} = CName) ->
+sput(#mt_cname{cname = Name, owner = UserId, type = Type} = CName, _) ->
   Data = mtc_thrift:write(CName),
   CnameBucket =
     case Type of

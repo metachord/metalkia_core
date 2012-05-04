@@ -17,6 +17,10 @@
 -record(mt_google_analytics, {account = <<>> :: binary(), 
                               host = <<>> :: binary()}).
 
+%% struct mt_yandex_metrika
+
+-record(mt_yandex_metrika, {id = <<>> :: binary()}).
+
 %% struct mt_person
 
 -record(mt_person, {id = undefined :: binary(), 
@@ -29,7 +33,8 @@
                     posts_list_key = <<>> :: binary(), 
                     comments_list_key = <<>> :: binary(), 
                     google_analytics = undefined :: undefined | #mt_google_analytics{}, 
-                    cnames = undefined :: undefined | list()}).
+                    cnames = undefined :: undefined | list(), 
+                    yandex_metrika = undefined :: undefined | #mt_yandex_metrika{}}).
 
 %% struct mt_author
 
@@ -125,6 +130,7 @@
                    streams = [] :: list(), 
                    logo = undefined :: undefined | binary(), 
                    google_analytics = undefined :: undefined | #mt_google_analytics{}, 
-                   type = 1 :: integer()}).
+                   type = 1 :: integer(), 
+                   yandex_metrika = undefined :: undefined | #mt_yandex_metrika{}}).
 
 -endif.

@@ -15,6 +15,10 @@ struct Mt_google_analytics {
   2:  binary               host,
 }
 
+struct Mt_yandex_metrika {
+  1:  binary               id,
+}
+
 struct Mt_person {
   1:  PersonId               id,
   2:  binary                 username,
@@ -27,6 +31,7 @@ struct Mt_person {
   9:  binary                 comments_list_key,
   10: optional Mt_google_analytics  google_analytics,
   11: optional list<binary>  cnames,
+  12: optional Mt_yandex_metrika    yandex_metrika,
 }
 
 struct Mt_author {
@@ -137,4 +142,5 @@ struct Mt_cname {
   5:  optional binary       logo,
   6:  optional Mt_google_analytics  google_analytics,
   7:  Mt_cname_type         type = Mt_cname_type.CNAME,
+  8:  optional Mt_yandex_metrika    yandex_metrika,
 }

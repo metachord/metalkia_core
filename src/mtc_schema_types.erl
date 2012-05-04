@@ -14,8 +14,12 @@ struct_info('mt_google_analytics') ->
   {struct, [{1, string}, {2, string}]}
 ;
 
+struct_info('mt_yandex_metrika') ->
+  {struct, [{1, string}]}
+;
+
 struct_info('mt_person') ->
-  {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, string}, {8, string}, {9, string}, {10, {struct, {'mtc_schema_types', 'mt_google_analytics'}}}, {11, {list, string}}]}
+  {struct, [{1, string}, {2, string}, {3, string}, {4, string}, {5, string}, {6, string}, {7, string}, {8, string}, {9, string}, {10, {struct, {'mtc_schema_types', 'mt_google_analytics'}}}, {11, {list, string}}, {12, {struct, {'mtc_schema_types', 'mt_yandex_metrika'}}}]}
 ;
 
 struct_info('mt_author') ->
@@ -55,7 +59,7 @@ struct_info('mt_stream') ->
 ;
 
 struct_info('mt_cname') ->
-  {struct, [{1, string}, {2, string}, {3, string}, {4, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}}, {5, string}, {6, {struct, {'mtc_schema_types', 'mt_google_analytics'}}}, {7, i32}]}
+  {struct, [{1, string}, {2, string}, {3, string}, {4, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}}, {5, string}, {6, {struct, {'mtc_schema_types', 'mt_google_analytics'}}}, {7, i32}, {8, {struct, {'mtc_schema_types', 'mt_yandex_metrika'}}}]}
 ;
 
 struct_info('i am a dummy struct') -> undefined.
@@ -64,8 +68,12 @@ struct_info_ext('mt_google_analytics') ->
   {struct, [{1, undefined, string, 'account', <<>>}, {2, undefined, string, 'host', <<>>}]}
 ;
 
+struct_info_ext('mt_yandex_metrika') ->
+  {struct, [{1, undefined, string, 'id', <<>>}]}
+;
+
 struct_info_ext('mt_person') ->
-  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'username', <<>>}, {3, optional, string, 'password_sha1', undefined}, {4, optional, string, 'name', undefined}, {5, undefined, string, 'email', <<>>}, {6, optional, string, 'facebook_id', undefined}, {7, optional, string, 'twitter_id', undefined}, {8, undefined, string, 'posts_list_key', <<>>}, {9, undefined, string, 'comments_list_key', <<>>}, {10, optional, {struct, {'mtc_schema_types', 'mt_google_analytics'}}, 'google_analytics', undefined}, {11, optional, {list, string}, 'cnames', undefined}]}
+  {struct, [{1, undefined, string, 'id', undefined}, {2, undefined, string, 'username', <<>>}, {3, optional, string, 'password_sha1', undefined}, {4, optional, string, 'name', undefined}, {5, undefined, string, 'email', <<>>}, {6, optional, string, 'facebook_id', undefined}, {7, optional, string, 'twitter_id', undefined}, {8, undefined, string, 'posts_list_key', <<>>}, {9, undefined, string, 'comments_list_key', <<>>}, {10, optional, {struct, {'mtc_schema_types', 'mt_google_analytics'}}, 'google_analytics', undefined}, {11, optional, {list, string}, 'cnames', undefined}, {12, optional, {struct, {'mtc_schema_types', 'mt_yandex_metrika'}}, 'yandex_metrika', undefined}]}
 ;
 
 struct_info_ext('mt_author') ->
@@ -105,7 +113,7 @@ struct_info_ext('mt_stream') ->
 ;
 
 struct_info_ext('mt_cname') ->
-  {struct, [{1, undefined, string, 'cname', <<>>}, {2, undefined, string, 'title', <<>>}, {3, undefined, string, 'owner', <<>>}, {4, undefined, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}, 'streams', []}, {5, optional, string, 'logo', undefined}, {6, optional, {struct, {'mtc_schema_types', 'mt_google_analytics'}}, 'google_analytics', undefined}, {7, undefined, i32, 'type',   1}]}
+  {struct, [{1, undefined, string, 'cname', <<>>}, {2, undefined, string, 'title', <<>>}, {3, undefined, string, 'owner', <<>>}, {4, undefined, {list, {struct, {'mtc_schema_types', 'mt_stream'}}}, 'streams', []}, {5, optional, string, 'logo', undefined}, {6, optional, {struct, {'mtc_schema_types', 'mt_google_analytics'}}, 'google_analytics', undefined}, {7, undefined, i32, 'type',   1}, {8, optional, {struct, {'mtc_schema_types', 'mt_yandex_metrika'}}, 'yandex_metrika', undefined}]}
 ;
 
 struct_info_ext('i am a dummy struct') -> undefined.

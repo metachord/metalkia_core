@@ -1,3 +1,7 @@
+%%% @copyright  2012 Metachord Ltd.
+%%% @author     Max Treskin <mtreskin@metachord.com>
+
+
 -ifndef(MT_UTIL_H).
 -define(MT_UTIL_H, true).
 

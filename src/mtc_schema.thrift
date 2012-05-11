@@ -1,3 +1,7 @@
+// Copyright:  2012 Metachord Ltd.
+// Author:     Max Treskin <mtreskin@metachord.com>
+
+
 namespace cpp metalkia
 namespace erl metalkia
 

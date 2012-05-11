@@ -1,3 +1,7 @@
+%%% @copyright  2012 Metachord Ltd.
+%%% @author     Max Treskin <mtreskin@metachord.com>
+
+
 -module(mtc_thrift).
 
 -include_lib("thrift/include/thrift_constants.hrl").

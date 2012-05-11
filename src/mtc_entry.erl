@@ -2,14 +2,6 @@
 %%% @author     Max Treskin <mtreskin@metachord.com>
 
 
-%%%-------------------------------------------------------------------
-%%% @author Maxim Treskin <mtreskin@metachord.com>
-%%% @copyright (C) 2011, Maxim Treskin
-%%% @doc
-%%%
-%%% @end
-%%% Created : 28 Oct 2011 by Maxim Treskin <mtreskin@metachord.com>
-%%%-------------------------------------------------------------------
 -module(mtc_entry).
 
 -include_lib("metalkia_core/include/mt_records.hrl").
